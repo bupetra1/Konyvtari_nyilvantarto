@@ -10,5 +10,6 @@ namespace Konyvtari_nyilvantarto
         public DateTime LoanDate {get; set;}
         public DateTime DueDate {get; set;}
         public int LateFee {get; set;}
+        public DateTime? ReturnDate {get; set;}
     }
 }

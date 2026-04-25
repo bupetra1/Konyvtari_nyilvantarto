@@ -23,10 +23,10 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToList();
         }
 
-        public IEnumerable<LoanDto> GetLoans(int studentId)
+        public IEnumerable<LoanDto> GetLoansByReaderId(int readerId)
         {
             return _dbContext.Loans
-                        .Where(x => x.ReaderId == studentId)
+                        .Where(x => x.ReaderId == readerId)
                         .Select(x => new LoanDto
                         {
                             ReaderId = x.ReaderId,

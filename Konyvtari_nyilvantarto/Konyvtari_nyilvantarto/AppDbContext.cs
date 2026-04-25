@@ -5,9 +5,9 @@ namespace Konyvtari_nyilvantarto
 {
     public class AppDbContext : DbContext
     {
-        DbSet<Book> Books {get; set;}
-        DbSet<Reader> Readers {get; set;}
-        DbSet<Loan> Loans {get; set;}
+        public DbSet<Book> Books {get; set;}
+        public DbSet<Reader> Readers {get; set;}
+        public DbSet<Loan> Loans {get; set;}
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
 
@@ -51,12 +51,10 @@ namespace Konyvtari_nyilvantarto
     {
         public int ReaderId {get; set;}
         public int BookId {get; set;}
-
         public DateTime LoanDate {get; set;}
         public DateTime DueDate {get; set;}
-
         public int LateFee {get; set;}
-
+        public DateTime? ReturnDate {get; set;}
         public Reader Reader {get; set;}
         public Book Book {get; set;}
     }
