@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.SignalR;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Konyvtari_nyilvantarto
 {
@@ -32,17 +33,22 @@ namespace Konyvtari_nyilvantarto
     public class Book
     {
         public int Id{get; set;}
+        [Required]
         public string Title{get; set;}
+        [Required]
         public string Author{get; set;}
-        public string Publisher{get; set;}
-        public DateTime PublicationYear {get; set;}
+        public string? Publisher{get; set;}
+        public DateTime? PublicationYear {get; set;}
         public ICollection<Loan> Loans {get; set;}
     }
     public class Reader
     {
         public int Id {get; set;}
+        [Required]
         public string Name {get; set;}
+        [Required]
         public string Address {get; set;}
+        [Required]
         public DateTime BirthDate {get; set;}
 
         public ICollection<Loan> Loans {get; set;}
@@ -51,7 +57,9 @@ namespace Konyvtari_nyilvantarto
     {
         public int ReaderId {get; set;}
         public int BookId {get; set;}
+        [Required]
         public DateTime LoanDate {get; set;}
+        [Required]
         public DateTime DueDate {get; set;}
         public int? LateFee {get; set;}
         public DateTime? ReturnDate {get; set;}
