@@ -23,7 +23,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToList();
         }
 
-        public IEnumerable<LoanDto> GetLoansByReaderId(int readerId)
+        public IEnumerable<LoanDto>? GetLoansByReaderId(int readerId)
         {
             bool readerExists = _dbContext.Readers.Any(r => r.Id == readerId);
 
