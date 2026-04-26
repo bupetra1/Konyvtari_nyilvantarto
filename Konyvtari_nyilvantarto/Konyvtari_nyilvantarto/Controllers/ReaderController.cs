@@ -21,7 +21,7 @@ namespace Konyvtari_nyilvantarto.Controllers
 
             if (readerLoans is null)
             {
-                return BadRequest("Reader has no loans!");
+                return NotFound($"There is no reader with ID: {readerId}");
             }
 
             return Ok(readerLoans);
@@ -31,11 +31,6 @@ namespace Konyvtari_nyilvantarto.Controllers
         public IActionResult GetAvailableBooks()
         {
             var availableBooks = _repository.GetAvailableBooks();
-
-            if(availableBooks is null)
-            {
-                return BadRequest("There are no books available!");
-            }
 
             return Ok(availableBooks);
         }

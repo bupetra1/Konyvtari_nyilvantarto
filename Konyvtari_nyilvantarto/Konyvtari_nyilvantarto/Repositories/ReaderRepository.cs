@@ -11,35 +11,40 @@ namespace Konyvtari_nyilvantarto.Repositories
         public IEnumerable<BookDto> GetAvailableBooks()
         {
             return _dbContext.Books
-                        .Where(x => x.Loans.All(x => x.ReturnDate == null))
-                        .Select(x => new BookDto
+                        .Where(b => b.Loans.All(l => l.ReturnDate != null))
+                        .Select(b => new BookDto
                         {
-                            Id = x.Id,
-                            Title = x.Title,
-                            Author = x.Author,
-                            Publisher = x.Publisher,
-                            PublicationYear = x.PublicationYear
+                            Id = b.Id,
+                            Title = b.Title,
+                            Author = b.Author,
+                            Publisher = b.Publisher,
+                            PublicationYear = b.PublicationYear
                         })
                         .ToList();
         }
 
         public IEnumerable<LoanDto> GetLoansByReaderId(int readerId)
         {
-            return _dbContext.Loans
-                        .Where(x => x.ReaderId == readerId)
-                        .Select(x => new LoanDto
-                        {
-                            ReaderId = x.ReaderId,
-                            ReaderName = x.Reader.Name,
-                            BookId = x.BookId,
-                            BookTitle = x.Book.Title,
-                            BookAuthor = x.Book.Author,
-                            LoanDate = x.LoanDate,
-                            DueDate = x.DueDate,
-                            ReturnDate = x.ReturnDate,
-                            LateFee = x.LateFee
-                        })
-                        .ToList();
+            bool readerExists = _dbContext.Readers.Any(r => r.Id == readerId);
+
+            if(readerExists){
+                return _dbContext.Loans
+                            .Where(l => l.ReaderId == readerId)
+                            .Select(l => new LoanDto
+                            {
+                                ReaderId = l.ReaderId,
+                                ReaderName = l.Reader.Name,
+                                BookId = l.BookId,
+                                BookTitle = l.Book.Title,
+                                BookAuthor = l.Book.Author,
+                                LoanDate = l.LoanDate,
+                                DueDate = l.DueDate,
+                                ReturnDate = l.ReturnDate,
+                                LateFee = l.LateFee
+                            })
+                            .ToList();
+            }
+            return null;
         }
     }
 }
