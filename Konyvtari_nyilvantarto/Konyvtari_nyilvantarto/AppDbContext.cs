@@ -38,7 +38,7 @@ namespace Konyvtari_nyilvantarto
         [Required]
         public string Author{get; set;}
         public string? Publisher{get; set;}
-        public DateTime? PublicationYear {get; set;}
+        public int? PublicationYear {get; set;}
         public ICollection<Loan> Loans {get; set;}
     }
     public class Reader

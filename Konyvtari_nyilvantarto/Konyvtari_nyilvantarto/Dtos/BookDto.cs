@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Konyvtari_nyilvantarto.Validations;
 
 namespace Konyvtari_nyilvantarto
 {
@@ -12,6 +13,8 @@ namespace Konyvtari_nyilvantarto
         [Required(ErrorMessage ="Book author is required!")]
         public string Author{get; set;}
         public string? Publisher{get; set;}
-        public DateTime? PublicationYear {get; set;}
+
+        [ValidPublicationYear]
+        public int? PublicationYear {get; set;}
     }
 }
