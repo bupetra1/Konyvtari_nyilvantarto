@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Konyvtari_nyilvantarto.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ReaderController : ControllerBase
     {
         IReaderRepository _repository;
@@ -12,7 +14,7 @@ namespace Konyvtari_nyilvantarto.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet("{readerId}")]
         public IActionResult GetLoansByReaderId(int readerId)
         {
             var readerLoans = _repository.GetLoansByReaderId(readerId);
