@@ -2,7 +2,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public class ReaderRepository : IReaderRepository
     {
-        public AppDbContext _dbContext;
+        private readonly AppDbContext _dbContext;
 
         public ReaderRepository(AppDbContext appDbContext)
         {
@@ -14,7 +14,6 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .Where(b => b.Loans.All(l => l.ReturnDate != null))
                         .Select(b => new BookDto
                         {
-                            Id = b.Id,
                             Title = b.Title,
                             Author = b.Author,
                             Publisher = b.Publisher,
@@ -32,9 +31,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                             .Where(l => l.ReaderId == readerId)
                             .Select(l => new LoanDto
                             {
-                                ReaderId = l.ReaderId,
                                 ReaderName = l.Reader.Name,
-                                BookId = l.BookId,
                                 BookTitle = l.Book.Title,
                                 BookAuthor = l.Book.Author,
                                 LoanDate = l.LoanDate,

@@ -6,9 +6,9 @@ namespace Konyvtari_nyilvantarto.Repositories
         IEnumerable<ReaderDto> GetReaders();
         IEnumerable<LoanDto> GetLoans();
 
-        void CreateBook();
-        void CreateReader();
-        void CreateLoan();
+        void CreateBook(BookDto bookDto);
+        void CreateReader(ReaderDto readerDto);
+        void CreateLoan(LoanDto loanDto);
 
         void UpdateBook();
         void UpdateReader();

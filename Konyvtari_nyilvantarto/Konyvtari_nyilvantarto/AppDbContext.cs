@@ -34,24 +34,24 @@ namespace Konyvtari_nyilvantarto
     {
         public int Id{get; set;}
         [Required]
-        public string Title{get; set;}
+        public string Title{get; set;} = string.Empty;
         [Required]
-        public string Author{get; set;}
+        public string Author{get; set;} = string.Empty;
         public string? Publisher{get; set;}
         public int? PublicationYear {get; set;}
-        public ICollection<Loan> Loans {get; set;}
+        public ICollection<Loan> Loans {get; set;} = new List<Loan>();
     }
     public class Reader
     {
         public int Id {get; set;}
         [Required]
-        public string Name {get; set;}
+        public string Name {get; set;} = string.Empty;
         [Required]
-        public string Address {get; set;}
+        public string Address {get; set;} = string.Empty;
         [Required]
         public DateTime BirthDate {get; set;}
 
-        public ICollection<Loan> Loans {get; set;}
+        public ICollection<Loan> Loans {get; set;} = new List<Loan>();
     }
     public class Loan
     {
@@ -63,7 +63,7 @@ namespace Konyvtari_nyilvantarto
         public DateTime DueDate {get; set;}
         public int? LateFee {get; set;}
         public DateTime? ReturnDate {get; set;}
-        public Reader Reader {get; set;}
-        public Book Book {get; set;}
+        public Reader Reader {get; set;} = new Reader();
+        public Book Book {get; set;} = new Book();
     }
 }

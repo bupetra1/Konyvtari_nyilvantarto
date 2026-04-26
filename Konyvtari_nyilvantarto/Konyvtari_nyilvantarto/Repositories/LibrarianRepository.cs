@@ -2,19 +2,48 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public class LibrarianRepository : ILibrarianRepository
     {
-        public void CreateBook()
+        private readonly AppDbContext _dbContext;
+
+        public LibrarianRepository(AppDbContext appDbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = appDbContext;
+        }
+        public void CreateBook(BookDto bookDto)
+        {
+            var book = new Book
+            {
+                Title = bookDto.Title,
+                Author = bookDto.Author,
+                Publisher = bookDto.Publisher,
+                PublicationYear = bookDto.PublicationYear
+            };
+            _dbContext.Books.Add(book);
+            _dbContext.SaveChanges();
         }
 
-        public void CreateLoan()
+        public void CreateLoan(LoanDto loanDto)
         {
-            throw new NotImplementedException();
+            var loan = new Loan
+            {
+                LoanDate = loanDto.LoanDate,
+                DueDate = loanDto.DueDate,
+                LateFee = loanDto.LateFee,
+                ReturnDate = loanDto.ReturnDate
+            };
+            _dbContext.Loans.Add(loan);
+            _dbContext.SaveChanges();
         }
 
-        public void CreateReader()
+        public void CreateReader(ReaderDto readerDto)
         {
-            throw new NotImplementedException();
+            var reader = new Reader
+            {
+                Name = readerDto.Name,
+                Address = readerDto.Address,
+                BirthDate = readerDto.BirthDate
+            };
+            _dbContext.Readers.Add(reader);
+            _dbContext.SaveChanges();
         }
 
         public void DeleteBook()
@@ -34,17 +63,47 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         public IEnumerable<BookDto> GetBooks()
         {
-            throw new NotImplementedException();
+            return _dbContext.Books
+                        .Select(b => new BookDto
+                        {
+                            Id = b.Id,
+                            Title = b.Title,
+                            Author = b.Author,
+                            Publisher = b.Publisher,
+                            PublicationYear = b.PublicationYear
+                        })
+                        .ToList();
         }
 
         public IEnumerable<LoanDto> GetLoans()
         {
-            throw new NotImplementedException();
+            return _dbContext.Loans
+                        .Select(l => new LoanDto
+                        {
+                            ReaderId = l.ReaderId,
+                            ReaderName = l.Reader.Name,
+                            BookId = l.BookId,
+                            BookTitle = l.Book.Title,
+                            BookAuthor = l.Book.Author,
+                            LoanDate = l.LoanDate,
+                            DueDate = l.DueDate,
+                            ReturnDate = l.ReturnDate,
+                            LateFee = l.LateFee
+                        })
+                        .ToList();                        
         }
 
         public IEnumerable<ReaderDto> GetReaders()
         {
-            throw new NotImplementedException();
+            return _dbContext.Readers
+                        .Select(r => new ReaderDto
+                        {
+                            Id = r.Id,
+                            Name = r.Name,
+                            Address = r.Address,
+                            BirthDate = r.BirthDate
+                        })
+                        .ToList();
         }
 
         public void UpdateBook()

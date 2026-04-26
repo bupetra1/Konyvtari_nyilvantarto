@@ -8,10 +8,10 @@ namespace Konyvtari_nyilvantarto
         public int Id{get; set;}
 
         [Required(ErrorMessage ="Book title is required!")]
-        public string Title{get; set;}
+        public string Title{get; set;} = string.Empty;
 
         [Required(ErrorMessage ="Book author is required!")]
-        public string Author{get; set;}
+        public string Author{get; set;} = string.Empty;
         public string? Publisher{get; set;}
 
         [ValidPublicationYear]
