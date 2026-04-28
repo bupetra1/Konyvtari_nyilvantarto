@@ -25,15 +25,23 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         public void CreateLoan(LoanDto loanDto)
         {
-            var loan = new Loan
+            var reader = _dbContext.Readers.Find(loanDto.ReaderId);
+            var book = _dbContext.Books.Find(loanDto.BookId);
+            if(reader is not null && book is not null)
             {
-                LoanDate = loanDto.LoanDate,
-                DueDate = loanDto.DueDate,
-                LateFee = loanDto.LateFee,
-                ReturnDate = loanDto.ReturnDate
-            };
-            _dbContext.Loans.Add(loan);
-            _dbContext.SaveChanges();
+                var loan = new Loan
+                {
+                    ReaderId = loanDto.ReaderId,
+                    BookId = loanDto.BookId,
+                    LoanDate = loanDto.LoanDate,
+                    DueDate = loanDto.DueDate,
+                    LateFee = loanDto.LateFee,
+                    ReturnDate = loanDto.ReturnDate
+                };
+                _dbContext.Loans.Add(loan);
+                _dbContext.SaveChanges();
+            }
+
         }
 
         public void CreateReader(ReaderDto readerDto)
