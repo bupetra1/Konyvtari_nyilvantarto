@@ -27,6 +27,18 @@ namespace Konyvtari_nyilvantarto
                 .HasOne(x => x.Reader)
                 .WithMany(x => x.Loans)
                 .HasForeignKey(x => x.ReaderId);
+
+            modelBuilder.Entity<Loan>()
+                .Property(l => l.LateFee)
+                .HasComputedColumnSql(@"CASE
+                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) BETWEEN 1 AND 10 THEN 100 * DATEDIFF(day, DueDate, ReturnDate)
+                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) BETWEEN 11 AND 15 THEN 100 * DATEDIFF(day, DueDate, ReturnDate) * 2
+                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) > 15 THEN 100 * DATEDIFF(day, DueDate, ReturnDate) * 3
+                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) BETWEEN 1 AND 10 THEN 100 * DATEDIFF(day, DueDate, GETDATE())
+                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) BETWEEN 11 AND 15 THEN 100 * DATEDIFF(day, DueDate, GETDATE()) * 2
+                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) > 15 THEN 100 * DATEDIFF(day, DueDate, GETDATE()) * 3
+                ELSE 0
+                END");
         }
     }
 
@@ -62,7 +74,7 @@ namespace Konyvtari_nyilvantarto
         public DateTime LoanDate {get; set;}
         [Required]
         public DateTime DueDate {get; set;}
-        public int? LateFee {get; set;}
+        public int LateFee {get; set;}
         public DateTime? ReturnDate {get; set;}
         public Reader Reader {get; set;} = new Reader();
         public Book Book {get; set;} = new Book();

@@ -17,7 +17,7 @@ namespace Konyvtari_nyilvantarto
 
         [Required(ErrorMessage ="Due date is required!")]
         public DateTime DueDate {get; set;}
-        public int? LateFee {get; set;}
+        public int LateFee {get; set;}
         
         [ValidReturnDate]
         public DateTime? ReturnDate {get; set;}
