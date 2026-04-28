@@ -131,19 +131,47 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToList();
         }
 
-        public void UpdateBook()
+
+        public void UpdateBook(int bookId, BookDto bookDto)
         {
-            throw new NotImplementedException();
+            var book = _dbContext.Books.Find(bookId);
+            if(book is not null)
+            {
+                book.Title = bookDto.Title;
+                book.Author = bookDto.Author;
+                book.Publisher = book.Publisher;
+                book.PublicationYear = book.PublicationYear;
+                
+                _dbContext.SaveChanges();
+            }
         }
 
-        public void UpdateLoan()
+        public void UpdateLoan(int loanId, LoanDto loanDto)
         {
-            throw new NotImplementedException();
+            var loan = _dbContext.Loans.Find(loanId);
+            if(loan is not null)
+            {
+                loan.ReaderId = loanDto.ReaderId;
+                loan.BookId = loanDto.BookId;
+                loan.LoanDate = loanDto.LoanDate;
+                loan.DueDate = loanDto.DueDate;
+                loan.ReturnDate = loanDto.ReturnDate;
+
+                _dbContext.SaveChanges();
+            }
         }
 
-        public void UpdateReader()
+        public void UpdateReader(int readerId, ReaderDto readerDto)
         {
-            throw new NotImplementedException();
+            var reader = _dbContext.Readers.Find(readerId);
+            if(reader is not null)
+            {
+                reader.Name = readerDto.Name;
+                reader.Address = readerDto.Address;
+                reader.BirthDate = readerDto.BirthDate;
+                
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

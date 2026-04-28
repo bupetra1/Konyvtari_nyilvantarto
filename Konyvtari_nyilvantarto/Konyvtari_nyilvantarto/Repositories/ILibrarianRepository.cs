@@ -10,9 +10,9 @@ namespace Konyvtari_nyilvantarto.Repositories
         void CreateReader(ReaderDto readerDto);
         void CreateLoan(LoanDto loanDto);
 
-        void UpdateBook();
-        void UpdateReader();
-        void UpdateLoan();
+        void UpdateBook(int bookId, BookDto bookDto);
+        void UpdateReader(int readerId, ReaderDto readerDto);
+        void UpdateLoan(int loanId, LoanDto loanDto);
 
         void DeleteBook(int bookId);
         void DeleteReader(int readerId);
