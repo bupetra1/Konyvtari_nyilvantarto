@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public class LibrarianRepository : ILibrarianRepository
@@ -46,19 +48,34 @@ namespace Konyvtari_nyilvantarto.Repositories
             _dbContext.SaveChanges();
         }
 
-        public void DeleteBook()
+        public void DeleteBook(int bookId)
         {
-            throw new NotImplementedException();
+            var book = _dbContext.Books.Find(bookId);
+            if(book is not null)
+            {
+                _dbContext.Books.Remove(book);
+                _dbContext.SaveChanges();
+            }
         }
 
-        public void DeleteLoan()
+        public void DeleteLoan(int loanId)
         {
-            throw new NotImplementedException();
+            var loan = _dbContext.Loans.Find(loanId);
+            if(loan is not null)
+            {
+                _dbContext.Loans.Remove(loan);
+                _dbContext.SaveChanges();
+            }
         }
 
-        public void DeleteReader()
+        public void DeleteReader(int readerId)
         {
-            throw new NotImplementedException();
+            var reader = _dbContext.Readers.Find(readerId);
+            if(reader is not null)
+            {
+                _dbContext.Readers.Remove(reader);
+                _dbContext.SaveChanges();
+            }
         }
 
         public IEnumerable<BookDto> GetBooks()

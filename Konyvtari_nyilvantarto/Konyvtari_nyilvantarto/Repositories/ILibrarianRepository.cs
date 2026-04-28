@@ -14,8 +14,8 @@ namespace Konyvtari_nyilvantarto.Repositories
         void UpdateReader();
         void UpdateLoan();
 
-        void DeleteBook();
-        void DeleteReader();
-        void DeleteLoan();
+        void DeleteBook(int bookId);
+        void DeleteReader(int readerId);
+        void DeleteLoan(int loanId);
     }
 }

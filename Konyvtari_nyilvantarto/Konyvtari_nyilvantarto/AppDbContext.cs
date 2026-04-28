@@ -14,9 +14,9 @@ namespace Konyvtari_nyilvantarto
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Book>().HasKey(x => x.Id);
-            modelBuilder.Entity<Reader>().HasKey(x => x.Id);
-            modelBuilder.Entity<Loan>().HasKey(x => new {x.BookId ,x.ReaderId});
+            modelBuilder.Entity<Book>().HasKey(b => b.Id);
+            modelBuilder.Entity<Reader>().HasKey(r => r.Id);
+            modelBuilder.Entity<Loan>().HasKey(l => l.Id);
 
             modelBuilder.Entity<Loan>()
                 .HasOne(x => x.Book)
@@ -55,6 +55,7 @@ namespace Konyvtari_nyilvantarto
     }
     public class Loan
     {
+        public int Id {get; set;}
         public int ReaderId {get; set;}
         public int BookId {get; set;}
         [Required]
