@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="Frontend/Frontend.csproj" Id="536b0caa-c8a4-4a79-8db4-ee1b15c77e6a" />
   <Project Path="Konyvtari_nyilvantarto/Konyvtari_nyilvantarto.csproj" />
 </Solution>
