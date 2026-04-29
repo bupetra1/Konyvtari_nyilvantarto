@@ -35,7 +35,6 @@ namespace Konyvtari_nyilvantarto.Repositories
                     BookId = loanDto.BookId,
                     LoanDate = loanDto.LoanDate,
                     DueDate = loanDto.DueDate,
-                    LateFee = loanDto.LateFee,
                     ReturnDate = loanDto.ReturnDate
                 };
                 _dbContext.Loans.Add(loan);
@@ -112,8 +111,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                             BookAuthor = l.Book.Author,
                             LoanDate = l.LoanDate,
                             DueDate = l.DueDate,
-                            ReturnDate = l.ReturnDate,
-                            LateFee = l.LateFee
+                            ReturnDate = l.ReturnDate
                         })
                         .ToList();                        
         }
