@@ -1,3 +1,4 @@
+using Share;
 using System.ComponentModel.DataAnnotations;
 
 namespace Konyvtari_nyilvantarto.Validations
@@ -6,7 +7,7 @@ namespace Konyvtari_nyilvantarto.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if(value is DateTime date && validationContext.ObjectInstance is LoanDto loan)
+            if(value is DateTime date && validationContext.ObjectInstance is LoanDTO loan)
             {
 
                 if(date < loan.LoanDate){    
