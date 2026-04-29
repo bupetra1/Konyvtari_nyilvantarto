@@ -85,23 +85,17 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
-        public IEnumerable<BookDto> GetBooks()
+        public IEnumerable<Book> GetBooks()
         {
             return _dbContext.Books
-                        .Select(b => new BookDto
-                        {
-                            Id = b.Id,
-                            Title = b.Title,
-                            Author = b.Author,
-                            Publisher = b.Publisher,
-                            PublicationYear = b.PublicationYear
-                        })
                         .ToList();
         }
 
         public IEnumerable<LoanDto> GetLoans()
         {
             return _dbContext.Loans
+                        .Include(l => l.Reader)
+                        .Include(l => l.Book)
                         .Select(l => new LoanDto
                         {
                             ReaderId = l.ReaderId,
@@ -121,7 +115,6 @@ namespace Konyvtari_nyilvantarto.Repositories
             return _dbContext.Readers
                         .Select(r => new ReaderDto
                         {
-                            Id = r.Id,
                             Name = r.Name,
                             Address = r.Address,
                             BirthDate = r.BirthDate

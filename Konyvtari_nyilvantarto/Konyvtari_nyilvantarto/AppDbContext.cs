@@ -51,7 +51,7 @@ namespace Konyvtari_nyilvantarto
         [Required]
         public string Address {get; set;} = string.Empty;
         [Required]
-        public DateTime BirthDate {get; set;}
+        public DateOnly BirthDate {get; set;}
 
         public ICollection<Loan> Loans {get; set;} = new List<Loan>();
     }
@@ -61,22 +61,22 @@ namespace Konyvtari_nyilvantarto
         public int ReaderId {get; set;}
         public int BookId {get; set;}
         [Required]
-        public DateTime LoanDate {get; set;}
+        public DateOnly LoanDate {get; set;}
         [Required]
-        public DateTime DueDate {get; set;}
+        public DateOnly DueDate {get; set;}
         [NotMapped]
         public int LateFee
         {
             get
             {
                 int daysLate = 0;
-                if(ReturnDate is null && DueDate < DateTime.Now)
+                if(ReturnDate is null && DueDate < DateOnly.FromDateTime(DateTime.Now))
                 {
-                    daysLate = (DateTime.Now - DueDate).Days;
+                    daysLate = DateOnly.FromDateTime(DateTime.Now).DayNumber - DueDate.DayNumber;
                 }
                 if(ReturnDate is not null && DueDate < ReturnDate)
                 {
-                    daysLate = (ReturnDate.Value - DueDate).Days;
+                    daysLate = ReturnDate.Value.DayNumber - DueDate.DayNumber;
                 }
                 return daysLate switch
                 {
@@ -89,7 +89,7 @@ namespace Konyvtari_nyilvantarto
                 
             }
         }
-        public DateTime? ReturnDate {get; set;}
+        public DateOnly? ReturnDate {get; set;}
         public Reader Reader {get; set;} = new Reader();
         public Book Book {get; set;} = new Book();
     }

@@ -13,12 +13,12 @@ namespace Konyvtari_nyilvantarto
 
         [Required(ErrorMessage ="Loan date is required!")]
         [ValidLoanDate]
-        public DateTime LoanDate {get; set;}
+        public DateOnly LoanDate {get; set;}
 
         [Required(ErrorMessage ="Due date is required!")]
-        public DateTime DueDate {get; set;}
+        public DateOnly DueDate {get; set;}
         
         [ValidReturnDate]
-        public DateTime? ReturnDate {get; set;}
+        public DateOnly? ReturnDate {get; set;}
     }
 }

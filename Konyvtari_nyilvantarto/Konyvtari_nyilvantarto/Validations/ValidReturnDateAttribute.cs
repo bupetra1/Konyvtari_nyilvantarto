@@ -6,7 +6,7 @@ namespace Konyvtari_nyilvantarto.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if(value is DateTime date && validationContext.ObjectInstance is LoanDto loan)
+            if(value is DateOnly date && validationContext.ObjectInstance is LoanDto loan)
             {
 
                 if(date < loan.LoanDate){    

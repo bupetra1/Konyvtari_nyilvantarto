@@ -31,5 +31,24 @@ namespace Konyvtari_nyilvantarto.Controllers
         {
             return Ok(_repository.GetLoans());
         }
+
+        [HttpPost("CreateBook")]
+        public IActionResult CreateBook(BookDto bookDto)
+        {
+            _repository.CreateBook(bookDto);
+            return Ok(bookDto);
+        }
+        [HttpPost("CreateReader")]
+        public IActionResult CreateReader(ReaderDto readerDto)
+        {
+            _repository.CreateReader(readerDto);
+            return Ok(readerDto);
+        }
+        [HttpPost("CreateLoan")]
+        public IActionResult CreateLoan(LoanDto loanDto)
+        {
+            _repository.CreateLoan(loanDto);
+            return Ok(loanDto);
+        }
     }
 }

@@ -5,7 +5,6 @@ namespace Konyvtari_nyilvantarto
 {
     public class BookDto
     {
-        public int Id{get; set;}
 
         [Required(ErrorMessage ="Book title is required!")]
         public string Title{get; set;} = string.Empty;

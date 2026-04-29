@@ -6,7 +6,7 @@ namespace Konyvtari_nyilvantarto.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if(value is DateTime date && date.Date < DateTime.Today)
+            if(value is DateOnly date && date < DateOnly.FromDateTime(DateTime.Now))
             {
 
                 return new ValidationResult("Loan date cannot be earlier than the current day!");

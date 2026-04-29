@@ -2,7 +2,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface ILibrarianRepository
     {
-        IEnumerable<BookDto> GetBooks();
+        IEnumerable<Book> GetBooks();
         IEnumerable<ReaderDto> GetReaders();
         IEnumerable<LoanDto> GetLoans();
 
