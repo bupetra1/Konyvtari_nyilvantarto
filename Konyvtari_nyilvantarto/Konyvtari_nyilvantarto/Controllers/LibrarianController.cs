@@ -50,5 +50,43 @@ namespace Konyvtari_nyilvantarto.Controllers
             _repository.CreateLoan(loanDto);
             return Ok(loanDto);
         }
+
+        [HttpDelete("DeleteBook")]
+        public IActionResult DeleteBook(int bookId)
+        {
+            _repository.DeleteBook(bookId);
+            return Ok();
+        }
+        [HttpDelete("DeleteReader")]
+        public IActionResult DeleteReader(int readerId)
+        {
+            _repository.DeleteReader(readerId);
+            return Ok();
+        }
+        [HttpDelete("DeleteLoan")]
+        public IActionResult DeleteLoan(int loanId)
+        {
+            _repository.DeleteLoan(loanId);
+            return Ok();
+        }
+        
+        [HttpPut("UpdateBook")]
+        public IActionResult UpdateBook(int bookId, BookDto bookDto)
+        {
+            _repository.UpdateBook(bookId,bookDto);
+            return Ok();
+        }
+        [HttpPut("UpdateReader")]
+        public IActionResult UpdateReader(int readerId, ReaderDto readerDto)
+        {
+            _repository.UpdateReader(readerId,readerDto);
+            return Ok();
+        }
+        [HttpPut("UpdateLoan")]
+        public IActionResult UpdateLoan(int loanId, LoanDto loanDto)
+        {
+            _repository.UpdateLoan(loanId,loanDto);
+            return Ok();
+        }
     }
 }
