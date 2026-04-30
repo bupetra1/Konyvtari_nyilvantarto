@@ -2,9 +2,9 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface ILibrarianRepository
     {
-        IEnumerable<Book> GetBooks();
-        IEnumerable<ReaderDto> GetReaders();
-        IEnumerable<LoanDto> GetLoans();
+        Task<IEnumerable<Book>> GetBooksAsync();
+        Task<IEnumerable<ReaderDto>> GetReadersAsync();
+        Task<IEnumerable<LoanDto>> GetLoansAsync();
 
         void CreateBook(BookDto bookDto);
         void CreateReader(ReaderDto readerDto);

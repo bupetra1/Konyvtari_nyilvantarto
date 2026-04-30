@@ -14,7 +14,7 @@ namespace Konyvtari_nyilvantarto.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{readerId}")]
+        [HttpGet("GetLoansBy{readerId}")]
         public IActionResult GetLoansByReaderId(int readerId)
         {
             var readerLoans = _repository.GetLoansByReaderId(readerId);
@@ -27,7 +27,7 @@ namespace Konyvtari_nyilvantarto.Controllers
             return Ok(readerLoans);
         }
 
-        [HttpGet]
+        [HttpGet("GetAvailableBooks")]
         public IActionResult GetAvailableBooks()
         {
             var availableBooks = _repository.GetAvailableBooks();

@@ -14,6 +14,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=library.db"));
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ILibrarianRepository, LibrarianRepository>();
+builder.Services.AddScoped<IReaderRepository, ReaderRepository>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

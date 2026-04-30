@@ -31,8 +31,8 @@ namespace Konyvtari_nyilvantarto.Repositories
             {
                 var loan = new Loan
                 {
-                    ReaderId = loanDto.ReaderId,
-                    BookId = loanDto.BookId,
+                    Reader = reader,
+                    Book = book,
                     LoanDate = loanDto.LoanDate,
                     DueDate = loanDto.DueDate,
                     ReturnDate = loanDto.ReturnDate
@@ -85,15 +85,15 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
-        public IEnumerable<Book> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            return _dbContext.Books
-                        .ToList();
+            return await _dbContext.Books
+                        .ToListAsync();
         }
 
-        public IEnumerable<LoanDto> GetLoans()
+        public async Task<IEnumerable<LoanDto>> GetLoansAsync()
         {
-            return _dbContext.Loans
+            return await _dbContext.Loans
                         .Include(l => l.Reader)
                         .Include(l => l.Book)
                         .Select(l => new LoanDto
@@ -107,19 +107,19 @@ namespace Konyvtari_nyilvantarto.Repositories
                             DueDate = l.DueDate,
                             ReturnDate = l.ReturnDate
                         })
-                        .ToList();                        
+                        .ToListAsync();                        
         }
 
-        public IEnumerable<ReaderDto> GetReaders()
+        public async Task<IEnumerable<ReaderDto>> GetReadersAsync()
         {
-            return _dbContext.Readers
+            return await _dbContext.Readers
                         .Select(r => new ReaderDto
                         {
                             Name = r.Name,
                             Address = r.Address,
                             BirthDate = r.BirthDate
                         })
-                        .ToList();
+                        .ToListAsync();
         }
 
 
@@ -130,8 +130,8 @@ namespace Konyvtari_nyilvantarto.Repositories
             {
                 book.Title = bookDto.Title;
                 book.Author = bookDto.Author;
-                book.Publisher = book.Publisher;
-                book.PublicationYear = book.PublicationYear;
+                book.Publisher = bookDto.Publisher;
+                book.PublicationYear = bookDto.PublicationYear;
                 
                 _dbContext.SaveChanges();
             }
