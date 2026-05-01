@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Konyvtari_nyilvantarto.Repositories
@@ -10,7 +11,7 @@ namespace Konyvtari_nyilvantarto.Repositories
         {
             _dbContext = appDbContext;
         }
-        public void CreateBook(BookDto bookDto)
+        public async Task CreateBookAsync(BookDto bookDto)
         {
             var book = new Book
             {
@@ -19,14 +20,19 @@ namespace Konyvtari_nyilvantarto.Repositories
                 Publisher = bookDto.Publisher,
                 PublicationYear = bookDto.PublicationYear
             };
-            _dbContext.Books.Add(book);
-            _dbContext.SaveChanges();
+            await _dbContext.Books.AddAsync(book);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void CreateLoan(LoanDto loanDto)
+        public async Task CreateLoanAsync(LoanDto loanDto)
         {
-            var reader = _dbContext.Readers.Find(loanDto.ReaderId);
-            var book = _dbContext.Books.Find(loanDto.BookId);
+            var readerTask = _dbContext.Readers.FindAsync(loanDto.ReaderId).AsTask();
+            var bookTask = _dbContext.Books.FindAsync(loanDto.BookId).AsTask();
+
+            await Task.WhenAll(readerTask,bookTask);
+
+            var reader = readerTask.Result;
+            var book = bookTask .Result;
             if(reader is not null && book is not null)
             {
                 var loan = new Loan
@@ -37,13 +43,13 @@ namespace Konyvtari_nyilvantarto.Repositories
                     DueDate = loanDto.DueDate,
                     ReturnDate = loanDto.ReturnDate
                 };
-                _dbContext.Loans.Add(loan);
-                _dbContext.SaveChanges();
+                await _dbContext.Loans.AddAsync(loan);
+                await _dbContext.SaveChangesAsync();
             }
 
         }
 
-        public void CreateReader(ReaderDto readerDto)
+        public async Task CreateReaderAsync(ReaderDto readerDto)
         {
             var reader = new Reader
             {
@@ -51,37 +57,37 @@ namespace Konyvtari_nyilvantarto.Repositories
                 Address = readerDto.Address,
                 BirthDate = readerDto.BirthDate
             };
-            _dbContext.Readers.Add(reader);
-            _dbContext.SaveChanges();
+            await _dbContext.Readers.AddAsync(reader);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void DeleteBook(int bookId)
+        public async Task DeleteBookAsync(int bookId)
         {
-            var book = _dbContext.Books.Find(bookId);
+            var book = await _dbContext.Books.FindAsync(bookId);
             if(book is not null)
             {
                 _dbContext.Books.Remove(book);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void DeleteLoan(int loanId)
+        public async Task DeleteLoanAsync(int loanId)
         {
-            var loan = _dbContext.Loans.Find(loanId);
+            var loan = await _dbContext.Loans.FindAsync(loanId);
             if(loan is not null)
             {
                 _dbContext.Loans.Remove(loan);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void DeleteReader(int readerId)
+        public async Task DeleteReaderAsync(int readerId)
         {
-            var reader = _dbContext.Readers.Find(readerId);
+            var reader = await _dbContext.Readers.FindAsync(readerId);
             if(reader is not null)
             {
                 _dbContext.Readers.Remove(reader);
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
@@ -123,9 +129,9 @@ namespace Konyvtari_nyilvantarto.Repositories
         }
 
 
-        public void UpdateBook(int bookId, BookDto bookDto)
+        public async Task UpdateBookAsync(int bookId, BookDto bookDto)
         {
-            var book = _dbContext.Books.Find(bookId);
+            var book = await _dbContext.Books.FindAsync(bookId);
             if(book is not null)
             {
                 book.Title = bookDto.Title;
@@ -133,13 +139,13 @@ namespace Konyvtari_nyilvantarto.Repositories
                 book.Publisher = bookDto.Publisher;
                 book.PublicationYear = bookDto.PublicationYear;
                 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void UpdateLoan(int loanId, LoanDto loanDto)
+        public async Task UpdateLoanAsync(int loanId, LoanDto loanDto)
         {
-            var loan = _dbContext.Loans.Find(loanId);
+            var loan = await _dbContext.Loans.FindAsync(loanId);
             if(loan is not null)
             {
                 loan.ReaderId = loanDto.ReaderId;
@@ -148,20 +154,20 @@ namespace Konyvtari_nyilvantarto.Repositories
                 loan.DueDate = loanDto.DueDate;
                 loan.ReturnDate = loanDto.ReturnDate;
 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
 
-        public void UpdateReader(int readerId, ReaderDto readerDto)
+        public async Task UpdateReaderAsync(int readerId, ReaderDto readerDto)
         {
-            var reader = _dbContext.Readers.Find(readerId);
+            var reader = await _dbContext.Readers.FindAsync(readerId);
             if(reader is not null)
             {
                 reader.Name = readerDto.Name;
                 reader.Address = readerDto.Address;
                 reader.BirthDate = readerDto.BirthDate;
                 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

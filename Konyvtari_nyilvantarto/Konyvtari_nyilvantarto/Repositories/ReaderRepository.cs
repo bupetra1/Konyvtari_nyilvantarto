@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public class ReaderRepository : IReaderRepository
@@ -8,9 +10,9 @@ namespace Konyvtari_nyilvantarto.Repositories
         {
             _dbContext = appDbContext;
         }
-        public IEnumerable<BookDto> GetAvailableBooks()
+        public async Task<IEnumerable<BookDto>> GetAvailableBooksAsync()
         {
-            return _dbContext.Books
+            return await _dbContext.Books
                         .Where(b => b.Loans.All(l => l.ReturnDate != null))
                         .Select(b => new BookDto
                         {
@@ -19,15 +21,15 @@ namespace Konyvtari_nyilvantarto.Repositories
                             Publisher = b.Publisher,
                             PublicationYear = b.PublicationYear
                         })
-                        .ToList();
+                        .ToListAsync();
         }
 
-        public IEnumerable<LoanDto>? GetLoansByReaderId(int readerId)
+        public async Task<IEnumerable<LoanDto>>? GetLoansByReaderIdAsync(int readerId)
         {
-            bool readerExists = _dbContext.Readers.Any(r => r.Id == readerId);
+            bool readerExists = await _dbContext.Readers.AnyAsync(r => r.Id == readerId);
 
             if(readerExists){
-                return _dbContext.Loans
+                return await _dbContext.Loans
                             .Where(l => l.ReaderId == readerId)
                             .Select(l => new LoanDto
                             {
@@ -36,9 +38,9 @@ namespace Konyvtari_nyilvantarto.Repositories
                                 BookAuthor = l.Book.Author,
                                 LoanDate = l.LoanDate,
                                 DueDate = l.DueDate,
-                                ReturnDate = l.ReturnDate
+                                ReturnDate = l.ReturnDate,
                             })
-                            .ToList();
+                            .ToListAsync();
             }
             return null;
         }
