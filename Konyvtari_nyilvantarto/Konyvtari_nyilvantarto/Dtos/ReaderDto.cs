@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Konyvtari_nyilvantarto.Validations;
 
-namespace Konyvtari_nyilvantarto
+namespace Konyvtari_nyilvantarto.Dtos
 {
     public class ReaderDto
     {

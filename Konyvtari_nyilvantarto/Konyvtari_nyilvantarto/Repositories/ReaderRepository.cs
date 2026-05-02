@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using Konyvtari_nyilvantarto.Dtos;
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public class ReaderRepository : IReaderRepository

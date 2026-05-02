@@ -17,5 +17,6 @@ namespace Konyvtari_nyilvantarto.Repositories
         Task DeleteBookAsync(int bookId);
         Task DeleteReaderAsync(int readerId);
         Task DeleteLoanAsync(int loanId);
+        Task<bool> IsBookAvailableAsync(int bookId);
     }
 }

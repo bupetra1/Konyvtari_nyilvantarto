@@ -170,5 +170,15 @@ namespace Konyvtari_nyilvantarto.Repositories
                 await _dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task<bool> IsBookAvailableAsync(int bookId)
+        {
+            var book = _dbContext.Loans.Where(l => l.BookId == bookId && l.ReturnDate == null);
+            if(book is not null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

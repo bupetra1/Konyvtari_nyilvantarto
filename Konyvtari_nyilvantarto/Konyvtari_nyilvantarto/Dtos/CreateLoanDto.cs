@@ -1,9 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Konyvtari_nyilvantarto.Dtos
 {
     public class CreateLoanDto
     {
+        [Required(ErrorMessage = "Reader ID is required!")]
         public int ReaderId {get; set;}
+        [Required(ErrorMessage = "Book ID is required!")]
         public int BookId {get; set;}
+        [Required(ErrorMessage = "Due date is required!")]
         public DateOnly DueDate {get; set;}
 
         public DateOnly LoanDate
