@@ -4,7 +4,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface IReaderRepository
     {
-        Task<IEnumerable<BookDto>> GetAvailableBooksAsync();
-        Task<IEnumerable<LoanDto>>? GetLoansByReaderIdAsync(int readerId);
+        Task<IEnumerable<ReaderBookListDto>> GetAvailableBooksAsync();
+        Task<IEnumerable<ReaderLoanListDto>>? GetLoansByReaderIdAsync(int readerId);
     }
 }

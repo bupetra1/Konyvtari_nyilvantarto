@@ -11,14 +11,14 @@ namespace Konyvtari_nyilvantarto.Repositories
         {
             _dbContext = appDbContext;
         }
-        public async Task CreateBookAsync(BookDto bookDto)
+        public async Task CreateBookAsync(CreateBookDto createBookDto)
         {
             var book = new Book
             {
-                Title = bookDto.Title,
-                Author = bookDto.Author,
-                Publisher = bookDto.Publisher,
-                PublicationYear = bookDto.PublicationYear
+                Title = createBookDto.Title,
+                Author = createBookDto.Author,
+                Publisher = createBookDto.Publisher,
+                PublicationYear = createBookDto.PublicationYear
             };
             await _dbContext.Books.AddAsync(book);
             await _dbContext.SaveChangesAsync();
@@ -51,13 +51,13 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         }
 
-        public async Task CreateReaderAsync(ReaderDto readerDto)
+        public async Task CreateReaderAsync(CreateReaderDto createReaderDto)
         {
             var reader = new Reader
             {
-                Name = readerDto.Name,
-                Address = readerDto.Address,
-                BirthDate = readerDto.BirthDate
+                Name = createReaderDto.Name,
+                Address = createReaderDto.Address,
+                BirthDate = createReaderDto.BirthDate
             };
             await _dbContext.Readers.AddAsync(reader);
             await _dbContext.SaveChangesAsync();
@@ -93,9 +93,17 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<BookDto>> GetBooksAsync()
         {
             return await _dbContext.Books
+                        .Select(b => new BookDto
+                        {
+                            BookId = b.Id,
+                            Title = b.Title,
+                            Author = b.Author,
+                            Publisher = b.Publisher,
+                            PublicationYear = b.PublicationYear
+                        })
                         .ToListAsync();
         }
 
@@ -106,6 +114,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .Include(l => l.Book)
                         .Select(l => new LoanDto
                         {
+                            LoanId = l.Id,
                             ReaderId = l.ReaderId,
                             ReaderName = l.Reader.Name,
                             BookId = l.BookId,
@@ -123,6 +132,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             return await _dbContext.Readers
                         .Select(r => new ReaderDto
                         {
+                            ReaderId = r.Id,
                             Name = r.Name,
                             Address = r.Address,
                             BirthDate = r.BirthDate

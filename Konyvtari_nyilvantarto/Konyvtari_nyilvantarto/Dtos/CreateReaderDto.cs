@@ -3,9 +3,8 @@ using Konyvtari_nyilvantarto.Validations;
 
 namespace Konyvtari_nyilvantarto.Dtos
 {
-    public class ReaderDto
+    public class CreateReaderDto
     {
-        public int ReaderId {get; set;}
         [Required(ErrorMessage ="Name is required!")]
         public string Name {get; set;} = string.Empty;
         [Required(ErrorMessage ="Address is required!")]

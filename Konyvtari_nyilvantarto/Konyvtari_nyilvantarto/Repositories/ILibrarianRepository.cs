@@ -4,12 +4,11 @@ namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface ILibrarianRepository
     {
-        Task<IEnumerable<Book>> GetBooksAsync();
+        Task<IEnumerable<BookDto>> GetBooksAsync();
         Task<IEnumerable<ReaderDto>> GetReadersAsync();
         Task<IEnumerable<LoanDto>> GetLoansAsync();
-
-        Task CreateBookAsync(BookDto bookDto);
-        Task CreateReaderAsync(ReaderDto readerDto);
+        Task CreateBookAsync(CreateBookDto bookDto);
+        Task CreateReaderAsync(CreateReaderDto readerDto);
         Task CreateLoanAsync(CreateLoanDto createLoanDto);
         Task UpdateBookAsync(int bookId, BookDto bookDto);
         Task UpdateReaderAsync(int readerId, ReaderDto readerDto);

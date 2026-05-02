@@ -34,16 +34,16 @@ namespace Konyvtari_nyilvantarto.Controllers
         }
 
         [HttpPost("CreateBook")]
-        public async Task<IActionResult> CreateBookAsync(BookDto bookDto)
+        public async Task<IActionResult> CreateBookAsync(CreateBookDto createBookDto)
         {
-            await _repository.CreateBookAsync(bookDto);
-            return Ok(bookDto);
+            await _repository.CreateBookAsync(createBookDto);
+            return Ok(createBookDto);
         }
         [HttpPost("CreateReader")]
-        public async Task<IActionResult> CreateReaderAsync(ReaderDto readerDto)
+        public async Task<IActionResult> CreateReaderAsync(CreateReaderDto createReaderDto)
         {
-            await _repository.CreateReaderAsync(readerDto);
-            return Ok(readerDto);
+            await _repository.CreateReaderAsync(createReaderDto);
+            return Ok(createReaderDto);
         }
         [HttpPost("CreateLoan")]
         public async Task<IActionResult> CreateLoanAsync(CreateLoanDto createLoanDto)

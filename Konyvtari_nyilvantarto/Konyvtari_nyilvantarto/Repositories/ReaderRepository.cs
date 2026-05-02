@@ -11,11 +11,11 @@ namespace Konyvtari_nyilvantarto.Repositories
         {
             _dbContext = appDbContext;
         }
-        public async Task<IEnumerable<BookDto>> GetAvailableBooksAsync()
+        public async Task<IEnumerable<ReaderBookListDto>> GetAvailableBooksAsync()
         {
             return await _dbContext.Books
                         .Where(b => b.Loans.All(l => l.ReturnDate != null))
-                        .Select(b => new BookDto
+                        .Select(b => new ReaderBookListDto
                         {
                             Title = b.Title,
                             Author = b.Author,
@@ -25,21 +25,21 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToListAsync();
         }
 
-        public async Task<IEnumerable<LoanDto>>? GetLoansByReaderIdAsync(int readerId)
+        public async Task<IEnumerable<ReaderLoanListDto>>? GetLoansByReaderIdAsync(int readerId)
         {
             bool readerExists = await _dbContext.Readers.AnyAsync(r => r.Id == readerId);
 
             if(readerExists){
                 return await _dbContext.Loans
                             .Where(l => l.ReaderId == readerId)
-                            .Select(l => new LoanDto
+                            .Select(l => new ReaderLoanListDto
                             {
                                 ReaderName = l.Reader.Name,
                                 BookTitle = l.Book.Title,
                                 BookAuthor = l.Book.Author,
                                 LoanDate = l.LoanDate,
                                 DueDate = l.DueDate,
-                                ReturnDate = l.ReturnDate,
+                                ReturnDate = l.ReturnDate
                             })
                             .ToListAsync();
             }
