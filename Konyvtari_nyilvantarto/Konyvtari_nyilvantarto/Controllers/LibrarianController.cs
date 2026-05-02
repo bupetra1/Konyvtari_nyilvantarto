@@ -1,5 +1,6 @@
 using Konyvtari_nyilvantarto.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Konyvtari_nyilvantarto.Dtos;
 
 namespace Konyvtari_nyilvantarto.Controllers
 {
@@ -45,10 +46,10 @@ namespace Konyvtari_nyilvantarto.Controllers
             return Ok(readerDto);
         }
         [HttpPost("CreateLoan")]
-        public async Task<IActionResult> CreateLoan(LoanDto loanDto)
+        public async Task<IActionResult> CreateLoan(CreateLoanDto createLoanDto)
         {
-            await _repository.CreateLoanAsync(loanDto);
-            return Ok(loanDto);
+            await _repository.CreateLoanAsync(createLoanDto);
+            return Ok(createLoanDto);
         }
 
         [HttpDelete("DeleteBook")]

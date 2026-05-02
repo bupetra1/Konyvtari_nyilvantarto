@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Konyvtari_nyilvantarto.Dtos;
 
 namespace Konyvtari_nyilvantarto.Repositories
 {
@@ -24,10 +25,10 @@ namespace Konyvtari_nyilvantarto.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateLoanAsync(LoanDto loanDto)
+        public async Task CreateLoanAsync(CreateLoanDto createLoanDto)
         {
-            var readerTask = _dbContext.Readers.FindAsync(loanDto.ReaderId).AsTask();
-            var bookTask = _dbContext.Books.FindAsync(loanDto.BookId).AsTask();
+            var readerTask = _dbContext.Readers.FindAsync(createLoanDto.ReaderId).AsTask();
+            var bookTask = _dbContext.Books.FindAsync(createLoanDto.BookId).AsTask();
 
             await Task.WhenAll(readerTask,bookTask);
 
@@ -39,9 +40,8 @@ namespace Konyvtari_nyilvantarto.Repositories
                 {
                     Reader = reader,
                     Book = book,
-                    LoanDate = loanDto.LoanDate,
-                    DueDate = loanDto.DueDate,
-                    ReturnDate = loanDto.ReturnDate
+                    LoanDate = createLoanDto.LoanDate,
+                    DueDate = createLoanDto.DueDate,
                 };
                 await _dbContext.Loans.AddAsync(loan);
                 await _dbContext.SaveChangesAsync();

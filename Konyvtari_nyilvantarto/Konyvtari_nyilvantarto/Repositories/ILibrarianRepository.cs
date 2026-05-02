@@ -1,3 +1,5 @@
+using Konyvtari_nyilvantarto.Dtos;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface ILibrarianRepository
@@ -8,7 +10,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         Task CreateBookAsync(BookDto bookDto);
         Task CreateReaderAsync(ReaderDto readerDto);
-        Task CreateLoanAsync(LoanDto loanDto);
+        Task CreateLoanAsync(CreateLoanDto createLoanDto);
         Task UpdateBookAsync(int bookId, BookDto bookDto);
         Task UpdateReaderAsync(int readerId, ReaderDto readerDto);
         Task UpdateLoanAsync(int loanId, LoanDto loanDto);
