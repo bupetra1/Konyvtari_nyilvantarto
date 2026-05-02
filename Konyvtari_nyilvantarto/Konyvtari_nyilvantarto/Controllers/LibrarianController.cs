@@ -16,75 +16,79 @@ namespace Konyvtari_nyilvantarto.Controllers
         }
 
         [HttpGet("books")]
-        public async Task<IActionResult> GetBooks()
+        public async Task<IActionResult> GetBooksAsync()
         {
             return Ok(await _repository.GetBooksAsync());
         }
 
         [HttpGet("readers")]
-        public async Task<IActionResult> GetReaders()
+        public async Task<IActionResult> GetReadersAsync()
         {
             return Ok(await _repository.GetReadersAsync());
         }
 
         [HttpGet("loans")]
-        public async Task<IActionResult> GetLoans()
+        public async Task<IActionResult> GetLoansAsync()
         {
             return Ok(await _repository.GetLoansAsync());
         }
 
         [HttpPost("CreateBook")]
-        public async Task<IActionResult> CreateBook(BookDto bookDto)
+        public async Task<IActionResult> CreateBookAsync(BookDto bookDto)
         {
             await _repository.CreateBookAsync(bookDto);
             return Ok(bookDto);
         }
         [HttpPost("CreateReader")]
-        public async Task<IActionResult> CreateReader(ReaderDto readerDto)
+        public async Task<IActionResult> CreateReaderAsync(ReaderDto readerDto)
         {
             await _repository.CreateReaderAsync(readerDto);
             return Ok(readerDto);
         }
         [HttpPost("CreateLoan")]
-        public async Task<IActionResult> CreateLoan(CreateLoanDto createLoanDto)
+        public async Task<IActionResult> CreateLoanAsync(CreateLoanDto createLoanDto)
         {
+            if(!await _repository.IsBookAvailableAsync(createLoanDto.BookId))
+            {
+                return Conflict("The specified book is currently unavailable for loans because it has not been returned yet.");
+            }
             await _repository.CreateLoanAsync(createLoanDto);
             return Ok(createLoanDto);
         }
 
         [HttpDelete("DeleteBook")]
-        public async Task<IActionResult> DeleteBook(int bookId)
+        public async Task<IActionResult> DeleteBookAsync(int bookId)
         {
             await _repository.DeleteBookAsync(bookId);
             return Ok();
         }
         [HttpDelete("DeleteReader")]
-        public async Task<IActionResult> DeleteReader(int readerId)
+        public async Task<IActionResult> DeleteReaderAsync(int readerId)
         {
             await _repository.DeleteReaderAsync(readerId);
             return Ok();
         }
         [HttpDelete("DeleteLoan")]
-        public async Task<IActionResult> DeleteLoan(int loanId)
+        public async Task<IActionResult> DeleteLoanAsync(int loanId)
         {
             await _repository.DeleteLoanAsync(loanId);
             return Ok();
         }
         
         [HttpPut("UpdateBook")]
-        public async Task<IActionResult> UpdateBook(int bookId, BookDto bookDto)
+        public async Task<IActionResult> UpdateBookAsync(int bookId, BookDto bookDto)
         {
             await _repository.UpdateBookAsync(bookId,bookDto);
             return Ok();
         }
         [HttpPut("UpdateReader")]
-        public async Task<IActionResult> UpdateReader(int readerId, ReaderDto readerDto)
+        public async Task<IActionResult> UpdateReaderAsync(int readerId, ReaderDto readerDto)
         {
             await _repository.UpdateReaderAsync(readerId,readerDto);
             return Ok();
         }
         [HttpPut("UpdateLoan")]
-        public async Task<IActionResult> UpdateLoan(int loanId, LoanDto loanDto)
+        public async Task<IActionResult> UpdateLoanAsync(int loanId, LoanDto loanDto)
         {
             await _repository.UpdateLoanAsync(loanId,loanDto);
             return Ok();

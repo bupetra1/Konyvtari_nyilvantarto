@@ -15,7 +15,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         }
 
         [HttpGet("GetLoansBy{readerId}")]
-        public async Task<IActionResult> GetLoansByReaderId(int readerId)
+        public async Task<IActionResult> GetLoansByReaderIdAsync(int readerId)
         {
             var readerLoans = await _repository.GetLoansByReaderIdAsync(readerId);
 
@@ -28,7 +28,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         }
 
         [HttpGet("GetAvailableBooks")]
-        public async Task<IActionResult> GetAvailableBooks()
+        public async Task<IActionResult> GetAvailableBooksAsync()
         {
             var availableBooks = await _repository.GetAvailableBooksAsync();
 

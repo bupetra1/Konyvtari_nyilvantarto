@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
+
 namespace Konyvtari_nyilvantarto.Validations
 {
     public class ValidBirthDateAttribute : ValidationAttribute

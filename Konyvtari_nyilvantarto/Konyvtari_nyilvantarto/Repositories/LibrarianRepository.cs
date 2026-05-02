@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Konyvtari_nyilvantarto.Dtos;
 
@@ -36,15 +35,18 @@ namespace Konyvtari_nyilvantarto.Repositories
             var book = bookTask .Result;
             if(reader is not null && book is not null)
             {
-                var loan = new Loan
+                if (await IsBookAvailableAsync(book.Id))
                 {
-                    Reader = reader,
-                    Book = book,
-                    LoanDate = createLoanDto.LoanDate,
-                    DueDate = createLoanDto.DueDate,
-                };
-                await _dbContext.Loans.AddAsync(loan);
-                await _dbContext.SaveChangesAsync();
+                    var loan = new Loan
+                    {
+                        Reader = reader,
+                        Book = book,
+                        LoanDate = createLoanDto.LoanDate,
+                        DueDate = createLoanDto.DueDate,
+                    };
+                    await _dbContext.Loans.AddAsync(loan);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
 
         }
@@ -173,7 +175,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         public async Task<bool> IsBookAvailableAsync(int bookId)
         {
-            var book = _dbContext.Loans.Where(l => l.BookId == bookId && l.ReturnDate == null);
+            var book = await _dbContext.Loans.Where(l => l.BookId == bookId && l.ReturnDate == null).FirstOrDefaultAsync();
             if(book is not null)
             {
                 return false;
