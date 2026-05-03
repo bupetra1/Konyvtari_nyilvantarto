@@ -74,7 +74,12 @@ namespace Konyvtari_nyilvantarto.Controllers
             await _repository.DeleteLoanAsync(loanId);
             return Ok();
         }
-        
+        /// <summary>
+        /// Itt tudod frissíteni egy már meglévő könyv adatait az azonosítója (ID) alapján.
+        /// </summary>
+        /// <param name="bookId">A könyv egyedi azonosítója.</param>
+        /// <param name="bookDto">A könyv új adatai (Cím, Szerző, stb.).</param>
+        /// <response code="200">Sikeres frissítés.</response>
         [HttpPut("UpdateBook")]
         public async Task<IActionResult> UpdateBookAsync(int bookId, BookDto bookDto)
         {
