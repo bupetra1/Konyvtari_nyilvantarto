@@ -1,21 +1,21 @@
+using Konyvtari_nyilvantarto.Dtos;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface ILibrarianRepository
     {
-        IEnumerable<BookDto> GetBooks();
-        IEnumerable<ReaderDto> GetReaders();
-        IEnumerable<LoanDto> GetLoans();
-
-        void CreateBook(BookDto bookDto);
-        void CreateReader(ReaderDto readerDto);
-        void CreateLoan(LoanDto loanDto);
-
-        void UpdateBook(int bookId, BookDto bookDto);
-        void UpdateReader(int readerId, ReaderDto readerDto);
-        void UpdateLoan(int loanId, LoanDto loanDto);
-
-        void DeleteBook(int bookId);
-        void DeleteReader(int readerId);
-        void DeleteLoan(int loanId);
+        Task<IEnumerable<BookDto>> GetBooksAsync();
+        Task<IEnumerable<ReaderDto>> GetReadersAsync();
+        Task<IEnumerable<LoanDto>> GetLoansAsync();
+        Task CreateBookAsync(CreateBookDto bookDto);
+        Task CreateReaderAsync(CreateReaderDto readerDto);
+        Task CreateLoanAsync(CreateLoanDto createLoanDto);
+        Task UpdateBookAsync(int bookId, BookDto bookDto);
+        Task UpdateReaderAsync(int readerId, ReaderDto readerDto);
+        Task UpdateLoanAsync(int loanId, LoanDto loanDto);
+        Task DeleteBookAsync(int bookId);
+        Task DeleteReaderAsync(int readerId);
+        Task DeleteLoanAsync(int loanId);
+        Task<bool> IsBookAvailableAsync(int bookId);
     }
 }

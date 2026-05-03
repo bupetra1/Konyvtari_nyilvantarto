@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
-
+using Konyvtari_nyilvantarto.Dtos;
 namespace Konyvtari_nyilvantarto.Validations
 {
     public class ValidReturnDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if(value is DateTime date && validationContext.ObjectInstance is LoanDto loan)
+            if(value is DateOnly date && validationContext.ObjectInstance is LoanDto loan)
             {
 
                 if(date < loan.LoanDate){    

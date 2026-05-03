@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -28,17 +29,6 @@ namespace Konyvtari_nyilvantarto
                 .WithMany(x => x.Loans)
                 .HasForeignKey(x => x.ReaderId);
 
-            modelBuilder.Entity<Loan>()
-                .Property(l => l.LateFee)
-                .HasComputedColumnSql(@"CASE
-                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) BETWEEN 1 AND 10 THEN 100 * DATEDIFF(day, DueDate, ReturnDate)
-                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) BETWEEN 11 AND 15 THEN 100 * DATEDIFF(day, DueDate, ReturnDate) * 2
-                WHEN ReturnDate IS NOT NULL AND ReturnDate > DueDate AND DATEDIFF(day, DueDate, ReturnDate) > 15 THEN 100 * DATEDIFF(day, DueDate, ReturnDate) * 3
-                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) BETWEEN 1 AND 10 THEN 100 * DATEDIFF(day, DueDate, GETDATE())
-                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) BETWEEN 11 AND 15 THEN 100 * DATEDIFF(day, DueDate, GETDATE()) * 2
-                WHEN ReturnDate IS NULL AND GETDATE() > DueDate AND DATEDIFF(day, DueDate, GETDATE()) > 15 THEN 100 * DATEDIFF(day, DueDate, GETDATE()) * 3
-                ELSE 0
-                END");
         }
     }
 
@@ -61,7 +51,7 @@ namespace Konyvtari_nyilvantarto
         [Required]
         public string Address {get; set;} = string.Empty;
         [Required]
-        public DateTime BirthDate {get; set;}
+        public DateOnly BirthDate {get; set;}
 
         public ICollection<Loan> Loans {get; set;} = new List<Loan>();
     }
@@ -71,11 +61,12 @@ namespace Konyvtari_nyilvantarto
         public int ReaderId {get; set;}
         public int BookId {get; set;}
         [Required]
-        public DateTime LoanDate {get; set;}
+        public DateOnly LoanDate {get; set;}
         [Required]
-        public DateTime DueDate {get; set;}
+        public DateOnly DueDate {get; set;}
+        [NotMapped]
         public int LateFee {get; set;}
-        public DateTime? ReturnDate {get; set;}
+        public DateOnly? ReturnDate {get; set;}
         public Reader Reader {get; set;} = new Reader();
         public Book Book {get; set;} = new Book();
     }

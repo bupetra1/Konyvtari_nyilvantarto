@@ -1,8 +1,10 @@
+using Konyvtari_nyilvantarto.Dtos;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public interface IReaderRepository
     {
-        IEnumerable<BookDto> GetAvailableBooks();
-        IEnumerable<LoanDto>? GetLoansByReaderId(int readerId);
+        Task<IEnumerable<ReaderBookListDto>> GetAvailableBooksAsync();
+        Task<IEnumerable<ReaderLoanListDto>>? GetLoansByReaderIdAsync(int readerId);
     }
 }

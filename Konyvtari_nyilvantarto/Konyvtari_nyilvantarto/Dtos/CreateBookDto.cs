@@ -3,10 +3,8 @@ using Konyvtari_nyilvantarto.Validations;
 
 namespace Konyvtari_nyilvantarto.Dtos
 {
-    public class BookDto
+    public class CreateBookDto
     {
-
-        public int BookId {get; set;}
         [Required(ErrorMessage ="Book title is required!")]
         public string Title{get; set;} = string.Empty;
 

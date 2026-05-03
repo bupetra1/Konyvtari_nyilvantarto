@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Konyvtari_nyilvantarto.Dtos;
+
 namespace Konyvtari_nyilvantarto.Repositories
 {
     public class ReaderRepository : IReaderRepository
@@ -8,38 +11,37 @@ namespace Konyvtari_nyilvantarto.Repositories
         {
             _dbContext = appDbContext;
         }
-        public IEnumerable<BookDto> GetAvailableBooks()
+        public async Task<IEnumerable<ReaderBookListDto>> GetAvailableBooksAsync()
         {
-            return _dbContext.Books
+            return await _dbContext.Books
                         .Where(b => b.Loans.All(l => l.ReturnDate != null))
-                        .Select(b => new BookDto
+                        .Select(b => new ReaderBookListDto
                         {
                             Title = b.Title,
                             Author = b.Author,
                             Publisher = b.Publisher,
                             PublicationYear = b.PublicationYear
                         })
-                        .ToList();
+                        .ToListAsync();
         }
 
-        public IEnumerable<LoanDto>? GetLoansByReaderId(int readerId)
+        public async Task<IEnumerable<ReaderLoanListDto>>? GetLoansByReaderIdAsync(int readerId)
         {
-            bool readerExists = _dbContext.Readers.Any(r => r.Id == readerId);
+            bool readerExists = await _dbContext.Readers.AnyAsync(r => r.Id == readerId);
 
             if(readerExists){
-                return _dbContext.Loans
+                return await _dbContext.Loans
                             .Where(l => l.ReaderId == readerId)
-                            .Select(l => new LoanDto
+                            .Select(l => new ReaderLoanListDto
                             {
                                 ReaderName = l.Reader.Name,
                                 BookTitle = l.Book.Title,
                                 BookAuthor = l.Book.Author,
                                 LoanDate = l.LoanDate,
                                 DueDate = l.DueDate,
-                                ReturnDate = l.ReturnDate,
-                                LateFee = l.LateFee
+                                ReturnDate = l.ReturnDate
                             })
-                            .ToList();
+                            .ToListAsync();
             }
             return null;
         }

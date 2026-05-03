@@ -6,13 +6,17 @@ namespace Konyvtari_nyilvantarto.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if(value is int year && year < 0)
+            if(value is int year)
             {
-
-                return new ValidationResult("Year cannot be negative!");
-                
+                if(year < 0)
+                {
+                    return new ValidationResult("Publication year cannot be negative!");
+                }
+                if(year > DateTime.Now.Year)
+                {
+                    return new ValidationResult("Publication year cannot exceed the current year!");
+                }
             }
-
             return ValidationResult.Success;
         }
     }

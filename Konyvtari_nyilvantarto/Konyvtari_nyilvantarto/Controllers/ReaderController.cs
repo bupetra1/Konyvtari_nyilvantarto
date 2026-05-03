@@ -14,10 +14,10 @@ namespace Konyvtari_nyilvantarto.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{readerId}")]
-        public IActionResult GetLoansByReaderId(int readerId)
+        [HttpGet("GetLoansBy{readerId}")]
+        public async Task<IActionResult> GetLoansByReaderIdAsync(int readerId)
         {
-            var readerLoans = _repository.GetLoansByReaderId(readerId);
+            var readerLoans = await _repository.GetLoansByReaderIdAsync(readerId);
 
             if (readerLoans is null)
             {
@@ -27,10 +27,10 @@ namespace Konyvtari_nyilvantarto.Controllers
             return Ok(readerLoans);
         }
 
-        [HttpGet]
-        public IActionResult GetAvailableBooks()
+        [HttpGet("GetAvailableBooks")]
+        public async Task<IActionResult> GetAvailableBooksAsync()
         {
-            var availableBooks = _repository.GetAvailableBooks();
+            var availableBooks = await _repository.GetAvailableBooksAsync();
 
             return Ok(availableBooks);
         }
