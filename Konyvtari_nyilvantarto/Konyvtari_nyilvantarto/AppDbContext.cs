@@ -162,7 +162,6 @@ namespace Konyvtari_nyilvantarto
 
         /// <summary>
         /// The dynamically calculated late fee for an overdue book.
-        /// This property is not mapped to the database schema.
         /// </summary>
         [NotMapped]
         public int LateFee {get; set;}
