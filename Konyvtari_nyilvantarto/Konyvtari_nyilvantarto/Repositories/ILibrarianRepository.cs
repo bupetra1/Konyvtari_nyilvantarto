@@ -12,11 +12,13 @@ namespace Konyvtari_nyilvantarto.Repositories
         /// </summary>
         /// <returns>A collection of <see cref="BookDto"/> objects representing all stored books.</returns>
         Task<IEnumerable<BookDto>> GetBooksAsync();
+
         /// <summary>
         /// Lists all reader data stored in the database.
         /// </summary>
         /// <returns>A collection of <see cref="ReaderDto"/> objects representing all stored reader data.</returns>
         Task<IEnumerable<ReaderDto>> GetReadersAsync();
+        
         /// <summary>
         /// Lists all loans stored in the database.
         /// </summary>
