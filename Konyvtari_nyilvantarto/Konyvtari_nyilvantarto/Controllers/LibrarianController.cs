@@ -16,19 +16,19 @@ namespace Konyvtari_nyilvantarto.Controllers
         }
 
         [HttpGet("books")]
-        public async Task<IActionResult> GetBooksAsync()
+        public async Task<ActionResult<List<BookDto>>> GetBooksAsync()
         {
             return Ok(await _repository.GetBooksAsync());
         }
 
         [HttpGet("readers")]
-        public async Task<IActionResult> GetReadersAsync()
+        public async Task<ActionResult<List<ReaderDto>>> GetReadersAsync()
         {
             return Ok(await _repository.GetReadersAsync());
         }
 
         [HttpGet("loans")]
-        public async Task<IActionResult> GetLoansAsync()
+        public async Task<ActionResult<List<LoanDto>>> GetLoansAsync()
         {
             return Ok(await _repository.GetLoansAsync());
         }
@@ -39,6 +39,7 @@ namespace Konyvtari_nyilvantarto.Controllers
             await _repository.CreateBookAsync(createBookDto);
             return Ok(createBookDto);
         }
+
         [HttpPost("CreateReader")]
         public async Task<IActionResult> CreateReaderAsync(CreateReaderDto createReaderDto)
         {
