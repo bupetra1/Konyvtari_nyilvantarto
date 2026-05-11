@@ -15,5 +15,6 @@ builder.Services.AddScoped(sp => new HttpClient
 builder.Services.AddScoped<IBookRepository, BookService>();
 builder.Services.AddScoped<ILoanRepository, LoanService>();
 builder.Services.AddScoped<IReaderRepository, ReaderService>();
+builder.Services.AddScoped<UserReaderService>();
 
 await builder.Build().RunAsync();
