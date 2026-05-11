@@ -3,18 +3,11 @@
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
-<<<<<<< HEAD
 
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <h1>404</h1>
-            <p>Az oldal nem található.</p>
-=======
     <NotFound>
         <PageTitle>Not found</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
             <p role="alert">Sajnáljuk, ezen a címen nem található semmi.</p>
->>>>>>> 0bbe750b0043a3fa024cc0abc5c5461099068a94
         </LayoutView>
     </NotFound>
 </Router>
