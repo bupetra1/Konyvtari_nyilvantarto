@@ -6,11 +6,23 @@ Ez egy könyvtári nyilvántartó rendszer, amely lehetővé teszi a könyvek ke
 </p>
 
 <button class="btn btn-primary" @onclick="NavigateToBooks">Könyvek megtekintése</button>
+<button class="btn btn-primary" @onclick="NavigateToLoans">Kölcsönzések megtekintése</button>
+<button class="btn btn-primary" @onclick="NavigateToReaders">Olvasók megtekintése</button>
 
 @code {
     private void NavigateToBooks()
     {
         NavigationManager.NavigateTo("/books");
+    }
+
+    private void NavigateToLoans()
+    {
+        NavigationManager.NavigateTo("/loans");
+    }
+
+    private void NavigateToReaders()
+    {
+        NavigationManager.NavigateTo("/readers");
     }
 
     [Inject]
