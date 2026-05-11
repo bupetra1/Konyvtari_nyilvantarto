@@ -5,24 +5,64 @@ namespace Frontend.Services
 {
     public class BookService : IBookRepository
     {
-        public Task<bool> CreateBookAsync(CreateBookDto book)
+        private readonly HttpClient _httpClient;
+        public BookService(HttpClient httpClient)
         {
-            throw new NotImplementedException();
+            _httpClient = httpClient;
+        }   
+        public async Task<bool> CreateBookAsync(CreateBookDto book)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/librarian/CreateBook", book);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating book: {ex.Message}");
+                return false;
+            }
         }
 
-        public Task<bool> DeleteBookAsync(int bookId)
+        public async Task<bool> DeleteBookAsync(int bookId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/librarian/DeleteBook?bookId={bookId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting book: {ex.Message}");
+                return false;
+            }
         }
 
-        public Task<List<BookDto>> GetBooksAsync()
+        public async Task<List<BookDto>> GetBooksAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<List<BookDto>>("api/librarian/books") ?? new List<BookDto>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching books: {ex.Message}");
+                return new List<BookDto>();
+            }
         }
 
-        public Task<bool> UpdateBookAsync(int bookId, BookDto book)
+        public async Task<bool> UpdateBookAsync(int bookId, BookDto book)
         {
-            throw new NotImplementedException();
+            try
+            { 
+                var response = await _httpClient.PutAsJsonAsync($"api/librarian/UpdateBook?bookId={bookId}", book);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating book: {ex.Message}");
+                return false;
+            }
         }
     }
 }
