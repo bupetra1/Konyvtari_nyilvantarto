@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using Share.Validations;
-
 namespace Share.Dtos
 {
     /// <summary>

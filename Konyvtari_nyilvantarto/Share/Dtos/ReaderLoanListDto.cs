@@ -1,5 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using Share.Validations;
+using Share.Logic;
 
 namespace Share.Dtos
 {
