@@ -1,0 +1,18 @@
+@page "/"
+
+<h1>Könyvtári nyilvántartó rendszer</h1>
+<p>
+Ez egy könyvtári nyilvántartó rendszer, amely lehetővé teszi a könyvek kezelését és nyilvántartását.
+</p>
+
+<button class="btn btn-primary" @onclick="NavigateToBooks">Könyvek megtekintése</button>
+
+@code {
+    private void NavigateToBooks()
+    {
+        NavigationManager.NavigateTo("/books");
+    }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+}
