@@ -1,70 +1,96 @@
 ﻿@page "/olvaso"
 @using Share.Dtos
-@using Share.Logic
 @using Frontend.Services
 @inject UserReaderService ReaderService
 
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="oi oi-person"></i> Olvasói Portál</h2>
-        <a href="" class="btn btn-outline-danger btn-sm">Kijelentkezés</a>
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="border-bottom pb-2">Olvasói Portál</h2>
+            <p class="text-muted">Itt láthatja aktuális kölcsönzéseit és a könyvtár elérhető állományát.</p>
+        </div>
     </div>
 
-    @* Belépett olvasó szimuláció *@
-    <div class="alert alert-secondary d-flex align-items-center">
-        <label class="me-2 mb-0">Olvasó ID:</label>
-        <input type="number" @bind="myReaderId" class="form-control form-control-sm w-auto me-2" />
-        <button class="btn btn-primary btn-sm" @onclick="LoadData">Frissítés</button>
+    @* Olvasó váltás szimulálása *@
+    <div class="card mb-4 bg-light">
+        <div class="card-body py-2 d-flex align-items-center">
+            <span class="me-3 fw-bold small text-uppercase">Aktuális Olvasó ID:</span>
+            <input type="number" @bind="myReaderId" class="form-control form-control-sm w-auto me-2" />
+            <button class="btn btn-secondary btn-sm" @onclick="LoadData">Adatok frissítése</button>
+        </div>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
         <div class="col-md-6">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-success text-white">Választható könyvek (nincsenek kikölcsönözve)</div>
-                <div class="card-body scrollable-card" style="max-height: 500px; overflow-y: auto;">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr><th>Cím</th><th>Szerző</th></tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var book in availableBooks)
-                            {
-                                <tr>
-                                    <td>@book.Title</td>
-                                    <td>@book.Author</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-dark text-white fw-bold">
+                    Elérhető könyvek (szabad példányok)
+                </div>
+                <div class="card-body p-0">
+                    <div style="max-height: 450px; overflow-y: auto;">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-light sticky-top">
+                                <tr><th>Cím</th><th>Szerző</th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var book in availableBooks)
+                                {
+                                    <tr>
+                                        <td>@book.Title</td>
+                                        <td>@book.Author</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="card shadow-sm h-100 border-primary">
-                <div class="card-header bg-primary text-white">Saját kölcsönzéseim és tartozások</div>
+            <div class="card h-100 shadow-sm border-info">
+                <div class="card-header bg-info text-white fw-bold">
+                    Saját kölcsönzéseim
+                </div>
                 <div class="card-body">
                     @if (myLoans.Any())
                     {
-                        @foreach (var loan in myLoans)
-                        {
-                            var isOverdue = loan.ReturnDate == null && loan.DueDate < DateOnly.FromDateTime(DateTime.Now);
-                            <div class="border-bottom mb-2 pb-2">
-                                <div class="d-flex justify-content-between">
-                                    <strong>@loan.BookTitle</strong>
-                                    <span class="badge @(isOverdue ? "bg-danger" : "bg-info")">
-                                        @(loan.LateFee > 0 ? $"{loan.LateFee} Ft" : "Nincs tartozás")
-                                    </span>
+                        <div class="list-group list-group-flush">
+                            @foreach (var loan in myLoans)
+                            {
+                                var isOverdue = loan.ReturnDate == null && loan.DueDate < DateOnly.FromDateTime(DateTime.Now);
+                                <div class="list-group-item px-0 py-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-1 fw-bold">@loan.BookTitle</h6>
+                                        <span class="badge @(isOverdue ? "bg-danger" : "bg-primary")">
+                                            @(loan.LateFee > 0 ? $"{loan.LateFee} Ft tartozás" : "Aktív")
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Határidő: @loan.DueDate</span>
+                                        @if (loan.ReturnDate != null)
+                                        {
+                                            <span class="text-success fw-bold">Visszahozva: @loan.ReturnDate</span>
+                                        }
+                                    </div>
                                 </div>
-                                <small class="text-muted">Határidő: @loan.DueDate</small>
-                            </div>
-                        }
+                            }
+                        </div>
                     }
                     else
                     {
-                        <p class="text-center text-muted">Nincsenek aktív kölcsönzések.</p>
+                        <div class="text-center py-5">
+                            <i class="oi oi-info text-muted h1"></i>
+                            <p class="text-muted mt-2">Nincs aktív kölcsönzése.</p>
+                        </div>
                     }
                 </div>
+                @if (myLoans.Any(l => l.LateFee > 0))
+                {
+                    <div class="card-footer bg-danger-subtle text-danger fw-bold text-center">
+                        Összes hátralék: @myLoans.Sum(l => l.LateFee) Ft
+                    </div>
+                }
             </div>
         </div>
     </div>

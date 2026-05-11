@@ -3,84 +3,130 @@
 @using Frontend.Services
 @inject IReaderRepository ReaderService
 @inject ILoanRepository LoanService
+@inject IJSRuntime JS
 
 <div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1>Olvasók kezelése</h1>
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h1><i class="oi oi-people me-2"></i>Olvasók kezelése</h1>
         </div>
-        <div class="col-md-4 text-end">
-            <button class="btn btn-primary" @onclick="ShowCreateForm">Új olvasó hozzáadása</button>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-success me-2" @onclick="ExportToCsv">
+                <i class="oi oi-share-boxed"></i> Export
+            </button>
+            <button class="btn btn-primary shadow-sm" @onclick="ShowCreateForm">
+                <i class="oi oi-plus"></i> Új olvasó hozzáadása
+            </button>
         </div>
     </div>
 
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card bg-light p-3 text-center shadow-sm">
+                <small class="text-muted text-uppercase fw-bold">Összes olvasó</small>
+                <div class="h3">@readers.Count</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light p-3 text-center shadow-sm border-danger">
+                <small class="text-danger text-uppercase fw-bold">Tartozással rendelkezőink</small>
+                <div class="h3 text-danger">@readers.Count(r => GetTotalLateFee(r.ReaderId) > 0)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-light p-3 text-center shadow-sm border-success">
+                <small class="text-success text-uppercase fw-bold">Keresés aktív</small>
+                <div class="h3 text-success">@FilteredReaders.Count</div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="btn-close" @onclick="() => message = null"></button>
+        </div>
+    }
+
     @if (showCreateForm)
     {
-        <div class="card mb-4 shadow border-primary">
+        <div class="card mb-4 shadow border-primary bg-light animate-fade-in">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">@(isEditMode ? "Olvasó szerkesztése" : "Új olvasó hozzáadása")</h5>
+                <h5 class="mb-0">@(isEditMode ? "Olvasó adatainak módosítása" : "Új olvasó regisztrálása")</h5>
             </div>
             <div class="card-body">
                 <EditForm Model="newReader" OnValidSubmit="SaveReader">
                     <DataAnnotationsValidator />
-                    <ValidationSummary class="text-danger small" />
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Név:</label>
-                        <InputText class="form-control" @bind-Value="newReader.Name" />
-                        <ValidationMessage For="@(() => newReader.Name)" class="text-danger" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Cím:</label>
-                        <InputText class="form-control" @bind-Value="newReader.Address" />
-                        <ValidationMessage For="@(() => newReader.Address)" class="text-danger" />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Születési dátum:</label>
-                        <InputDate TValue="DateOnly" class="form-control" @bind-Value="newReader.BirthDate" />
-                        <ValidationMessage For="@(() => newReader.BirthDate)" class="text-danger" />
-                    </div>
-
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success">Mentés</button>
-                        <button type="button" class="btn btn-secondary" @onclick="CancelCreate">Mégse</button>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Név:</label>
+                            <InputText class="form-control" @bind-Value="newReader.Name" />
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">Cím:</label>
+                            <InputText class="form-control" @bind-Value="newReader.Address" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold">Születési dátum:</label>
+                            <InputDate TValue="DateOnly" class="form-control" @bind-Value="newReader.BirthDate" />
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-success px-4">Mentés</button>
+                            <button type="button" class="btn btn-secondary px-4" @onclick="CancelCreate">Mégse</button>
+                        </div>
                     </div>
                 </EditForm>
             </div>
         </div>
     }
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover shadow-sm">
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-striped table-hover align-middle mb-0">
             <thead class="table-dark">
                 <tr>
-                    <th>ID</th>
+                    <th style="width: 60px;">ID</th>
                     <th>Név</th>
                     <th>Cím</th>
                     <th>Születési dátum</th>
-                    <th>Késedelmi díj</th>
-                    <th>Műveletek</th>
+                    <th>Összes tartozás</th>
+                    <th class="text-center" style="width: 200px;">Műveletek</th>
+                </tr>
+                <tr class="bg-light">
+                    <td></td>
+                    <td><input class="form-control form-control-sm" placeholder="Név szűrés..." @bind="fName" @bind:event="oninput" /></td>
+                    <td><input class="form-control form-control-sm" placeholder="Cím szűrés..." @bind="fAddress" @bind:event="oninput" /></td>
+                    <td colspan="3"></td>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var reader in readers)
+                @if (!FilteredReaders.Any())
                 {
                     <tr>
-                        <td>@reader.ReaderId</td>
-                        <td>@reader.Name</td>
-                        <td>@reader.Address</td>
-                        <td>@reader.BirthDate</td>
-                        <td>
-                            @{
-                                var totalFee = GetTotalLateFee(reader.ReaderId);
-                            }
-                            <span class="badge @(totalFee > 0 ? "bg-danger" : "bg-secondary")">@totalFee Ft</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" @onclick="() => EditReader(reader)">Szerkesztés</button>
-                            <button class="btn btn-danger btn-sm" @onclick="() => DeleteReader(reader.ReaderId)">Törlés</button>
-                        </td>
+                        <td colspan="6" class="text-center py-4 text-muted">Nincs találat a szűrési feltételeknek megfelelően.</td>
                     </tr>
+                }
+                else
+                {
+                    @foreach (var reader in FilteredReaders)
+                    {
+                        var totalFee = GetTotalLateFee(reader.ReaderId);
+                        <tr>
+                            <td class="small text-muted">#@reader.ReaderId</td>
+                            <td class="fw-bold">@reader.Name</td>
+                            <td>@reader.Address</td>
+                            <td>@reader.BirthDate</td>
+                            <td>
+                                <span class="badge @(totalFee > 0 ? "bg-danger" : "bg-success") px-3 py-2">
+                                    @totalFee Ft
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-warning me-1" @onclick="() => EditReader(reader)">Módosít</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteReader(reader.ReaderId)">Töröl</button>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -93,6 +139,16 @@
     private CreateReaderDto newReader = new();
     private ReaderDto? selectedReader;
     private bool showCreateForm = false, isEditMode = false;
+    private string? message;
+
+    // SZŰRŐK
+    private string fName = "";
+    private string fAddress = "";
+
+    private List<ReaderDto> FilteredReaders => readers
+        .Where(r => (string.IsNullOrEmpty(fName) || r.Name.Contains(fName, StringComparison.OrdinalIgnoreCase)) &&
+                    (string.IsNullOrEmpty(fAddress) || r.Address.Contains(fAddress, StringComparison.OrdinalIgnoreCase)))
+        .ToList();
 
     protected override async Task OnInitializedAsync() => await LoadData();
 
@@ -104,32 +160,37 @@
         await Task.WhenAll(readersTask, allLoansTask);
         readers = readersTask.Result.ToList();
         allLoans = allLoansTask.Result.ToList();
-
-        StateHasChanged();
     }
 
     private int GetTotalLateFee(int readerId) => allLoans.Where(l => l.ReaderId == readerId).Sum(l => l.LateFee);
 
     private void ShowCreateForm()
     {
-        newReader = new();
+        newReader = new() { BirthDate = new DateOnly(2000, 1, 1) };
         isEditMode = false;
         showCreateForm = true;
+        message = null;
     }
 
     private async Task SaveReader()
     {
+        bool success;
         if (isEditMode && selectedReader != null)
         {
             var update = new ReaderDto { ReaderId = selectedReader.ReaderId, Name = newReader.Name, Address = newReader.Address, BirthDate = newReader.BirthDate };
-            await ReaderService.UpdateReaderAsync(selectedReader.ReaderId, update);
+            success = await ReaderService.UpdateReaderAsync(selectedReader.ReaderId, update);
         }
         else
         {
-            await ReaderService.CreateReaderAsync(newReader);
+            success = await ReaderService.CreateReaderAsync(newReader);
         }
-        showCreateForm = false;
-        await LoadData();
+
+        if (success)
+        {
+            message = "Sikeres mentés!";
+            showCreateForm = false;
+            await LoadData();
+        }
     }
 
     private void EditReader(ReaderDto reader)
@@ -138,8 +199,33 @@
         newReader = new CreateReaderDto { Name = reader.Name, Address = reader.Address, BirthDate = reader.BirthDate };
         isEditMode = true;
         showCreateForm = true;
+        message = null;
     }
 
     private void CancelCreate() => showCreateForm = false;
-    private async Task DeleteReader(int id) { if (await ReaderService.DeleteReaderAsync(id)) await LoadData(); }
+
+    private async Task DeleteReader(int id)
+    {
+        // PLUSZ FUNKCIÓ: TÖRLÉS MEGERŐSÍTÉSSEL
+        bool confirmed = await JS.InvokeAsync<bool>("confirm", "Biztosan törölni szeretné ezt az olvasót?");
+        if (confirmed)
+        {
+            if (await ReaderService.DeleteReaderAsync(id))
+            {
+                message = "Olvasó eltávolítva.";
+                await LoadData();
+            }
+        }
+    }
+
+    // PLUSZ FUNKCIÓ: CSV EXPORT
+    private async Task ExportToCsv()
+    {
+        var csvLines = new List<string> { "ID;Nev;Cim;SzuletesiDatum;Tartozas" };
+        csvLines.AddRange(FilteredReaders.Select(r =>
+            $"{r.ReaderId};{r.Name};{r.Address};{r.BirthDate};{GetTotalLateFee(r.ReaderId)}"));
+        
+        var csvContent = "\uFEFF" + string.Join("\n", csvLines);
+        await JS.InvokeVoidAsync("downloadFile", "olvasok_export.csv", csvContent);
+    }
 }

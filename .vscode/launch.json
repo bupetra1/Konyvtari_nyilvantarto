@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Backend",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Konyvtari_nyilvantarto/Konyvtari_nyilvantarto.csproj"
+    },
+    {
+      "name": "Frontend",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/Frontend/Frontend.csproj"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Both (Frontend & Backend)",
+      "configurations": ["Backend", "Frontend"],
+      "stopAll": true
+    }
+  ]
+}
