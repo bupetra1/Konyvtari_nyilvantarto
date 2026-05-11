@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Konyvtari_nyilvantarto\Konyvtari_nyilvantarto\Konyvtari_nyilvantarto.csproj" />
+  </ItemGroup>
+
 </Project>
