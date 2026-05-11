@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Konyvtari_nyilvantarto.Validations
+namespace Share.Validations
 {
     internal class ValidPublicationYearAttribute : ValidationAttribute
     {

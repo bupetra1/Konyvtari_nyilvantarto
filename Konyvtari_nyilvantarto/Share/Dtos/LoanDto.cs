@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Konyvtari_nyilvantarto.Validations;
-using Share.Logic;
+using Share.Validations;
 
 namespace Share.Dtos
 {

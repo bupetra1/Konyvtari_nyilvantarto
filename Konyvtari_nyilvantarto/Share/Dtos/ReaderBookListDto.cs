@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Konyvtari_nyilvantarto.Validations;
+using Share.Validations;
 
 namespace Share.Dtos
 {
@@ -22,10 +22,6 @@ namespace Share.Dtos
         /// The publisher of the book.
         /// </summary>
         public string? Publisher{get; set;}
-        
-        /// <summary>
-        /// The year the book was published.
-        /// </summary>
         public int? PublicationYear {get; set;}
     }
 }
