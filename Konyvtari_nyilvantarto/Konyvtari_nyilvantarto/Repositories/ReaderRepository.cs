@@ -3,14 +3,26 @@ using Share.Dtos;
 
 namespace Konyvtari_nyilvantarto.Repositories
 {
+    /// <summary>
+    /// Provides implementation for querying reader-specific library data.
+    /// </summary>
     public class ReaderRepository : IReaderRepository
     {
+        /// <summary>
+        /// The database context used for data access operations.
+        /// </summary>
         private readonly AppDbContext _dbContext;
 
+        /// <summary>
+        /// Constructor for the <see cref="ReaderRepository"/> class.
+        /// </summary>
+        /// <param name="appDbContext">The database context used to perform data operations.</param>
         public ReaderRepository(AppDbContext appDbContext)
         {
             _dbContext = appDbContext;
         }
+
+        /// <inheritdoc/>
         public async Task<IEnumerable<ReaderBookListDto>> GetAvailableBooksAsync()
         {
             return await _dbContext.Books
@@ -25,6 +37,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToListAsync();
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<ReaderLoanListDto>>? GetLoansByReaderIdAsync(int readerId)
         {
             bool readerExists = await _dbContext.Readers.AnyAsync(r => r.Id == readerId);

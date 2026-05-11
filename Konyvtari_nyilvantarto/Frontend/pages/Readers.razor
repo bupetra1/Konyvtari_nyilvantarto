@@ -1,0 +1,145 @@
+﻿@page "/readers"
+@using Share.Dtos
+@using Frontend.Services
+@inject IReaderRepository ReaderService
+@inject ILoanRepository LoanService
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1>Olvasók kezelése</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary" @onclick="ShowCreateForm">Új olvasó hozzáadása</button>
+        </div>
+    </div>
+
+    @if (showCreateForm)
+    {
+        <div class="card mb-4 shadow border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(isEditMode ? "Olvasó szerkesztése" : "Új olvasó hozzáadása")</h5>
+            </div>
+            <div class="card-body">
+                <EditForm Model="newReader" OnValidSubmit="SaveReader">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger small" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Név:</label>
+                        <InputText class="form-control" @bind-Value="newReader.Name" />
+                        <ValidationMessage For="@(() => newReader.Name)" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Cím:</label>
+                        <InputText class="form-control" @bind-Value="newReader.Address" />
+                        <ValidationMessage For="@(() => newReader.Address)" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Születési dátum:</label>
+                        <InputDate TValue="DateOnly" class="form-control" @bind-Value="newReader.BirthDate" />
+                        <ValidationMessage For="@(() => newReader.BirthDate)" class="text-danger" />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">Mentés</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CancelCreate">Mégse</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Név</th>
+                    <th>Cím</th>
+                    <th>Születési dátum</th>
+                    <th>Késedelmi díj</th>
+                    <th>Műveletek</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reader in readers)
+                {
+                    <tr>
+                        <td>@reader.ReaderId</td>
+                        <td>@reader.Name</td>
+                        <td>@reader.Address</td>
+                        <td>@reader.BirthDate</td>
+                        <td>
+                            @{
+                                var totalFee = GetTotalLateFee(reader.ReaderId);
+                            }
+                            <span class="badge @(totalFee > 0 ? "bg-danger" : "bg-secondary")">@totalFee Ft</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" @onclick="() => EditReader(reader)">Szerkesztés</button>
+                            <button class="btn btn-danger btn-sm" @onclick="() => DeleteReader(reader.ReaderId)">Törlés</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<ReaderDto> readers = new();
+    private List<LoanDto> allLoans = new();
+    private CreateReaderDto newReader = new();
+    private ReaderDto? selectedReader;
+    private bool showCreateForm = false, isEditMode = false;
+
+    protected override async Task OnInitializedAsync() => await LoadData();
+
+    private async Task LoadData()
+    {
+        var readersTask = ReaderService.GetReadersAsync();
+        var allLoansTask = LoanService.GetLoansAsync();
+
+        await Task.WhenAll(readersTask, allLoansTask);
+        readers = readersTask.Result.ToList();
+        allLoans = allLoansTask.Result.ToList();
+
+        StateHasChanged();
+    }
+
+    private int GetTotalLateFee(int readerId) => allLoans.Where(l => l.ReaderId == readerId).Sum(l => l.LateFee);
+
+    private void ShowCreateForm()
+    {
+        newReader = new();
+        isEditMode = false;
+        showCreateForm = true;
+    }
+
+    private async Task SaveReader()
+    {
+        if (isEditMode && selectedReader != null)
+        {
+            var update = new ReaderDto { ReaderId = selectedReader.ReaderId, Name = newReader.Name, Address = newReader.Address, BirthDate = newReader.BirthDate };
+            await ReaderService.UpdateReaderAsync(selectedReader.ReaderId, update);
+        }
+        else
+        {
+            await ReaderService.CreateReaderAsync(newReader);
+        }
+        showCreateForm = false;
+        await LoadData();
+    }
+
+    private void EditReader(ReaderDto reader)
+    {
+        selectedReader = reader;
+        newReader = new CreateReaderDto { Name = reader.Name, Address = reader.Address, BirthDate = reader.BirthDate };
+        isEditMode = true;
+        showCreateForm = true;
+    }
+
+    private void CancelCreate() => showCreateForm = false;
+    private async Task DeleteReader(int id) { if (await ReaderService.DeleteReaderAsync(id)) await LoadData(); }
+}

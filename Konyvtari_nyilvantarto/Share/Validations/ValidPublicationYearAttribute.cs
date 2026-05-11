@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Konyvtari_nyilvantarto.Validations
+namespace Share.Validations
 {
-    public class ValidPublicationYearAttribute : ValidationAttribute
+    internal class ValidPublicationYearAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
