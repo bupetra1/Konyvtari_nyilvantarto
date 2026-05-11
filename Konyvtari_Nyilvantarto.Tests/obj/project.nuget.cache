@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Y2952Wl4F00=",
+  "dgSpecHash": "A3yQ1HVl+WE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Sára\\Documents\\Konyvtari_nyilvantarto\\Konyvtari_nyilvantarto.Tests\\Konyvtari_Nyilvantarto.Tests.csproj",
+  "projectFilePath": "C:\\Users\\Sára\\Documents\\Konyvtari_nyilvantarto\\Konyvtari_Nyilvantarto.Tests\\Konyvtari_Nyilvantarto.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sára\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\Sára\\.nuget\\packages\\coverlet.collector\\6.0.4\\coverlet.collector.6.0.4.nupkg.sha512",

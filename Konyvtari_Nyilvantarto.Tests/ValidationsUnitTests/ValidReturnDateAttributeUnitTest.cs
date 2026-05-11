@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using Konyvtari_nyilvantarto.Validations;
+using Share.Validations;
 using System.Reflection;
 using Xunit;
 using Share.Dtos;

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Konyvtari_Nyilvantarto.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2d194a01ad2a1f3437c172a8723b6ea0fbcf0c19")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4178f9086eafee20a97ede5073dc97f9a02c7058")]
 [assembly: System.Reflection.AssemblyProductAttribute("Konyvtari_Nyilvantarto.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Konyvtari_Nyilvantarto.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

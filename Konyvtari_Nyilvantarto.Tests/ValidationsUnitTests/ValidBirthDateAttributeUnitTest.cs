@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Data;
-using Konyvtari_nyilvantarto.Validations;
+using Share.Validations;
 using System.Reflection;
 using Xunit;
 
@@ -12,7 +12,7 @@ public class ValidBirthDateAttributeTests
     public void ValidDate_ValidationOccurs_ReturnsSuccess()
     {
         //Arrange
-        var attribute = new ValidBirthDateAttribute();
+        var attribute = new ValidBirthDateAttribute(); 
         var validDate = new DateOnly(2000, 5, 10);
         var context = new ValidationContext(new object());
         //Act

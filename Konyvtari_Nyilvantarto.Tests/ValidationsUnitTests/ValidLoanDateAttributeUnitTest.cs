@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Data;
-using Konyvtari_nyilvantarto.Validations;
+using Share.Validations;
 using System.Reflection;
 using Xunit;
 
@@ -15,7 +15,7 @@ public class ValidLoanDateAttributeUnitTest
         var attribute = new ValidLoanDateAttribute();
         var today = DateTime.Today;
         var context = new ValidationContext(new object());
-        //Act
+        //Acts
         var result = attribute.GetValidationResult(today, context);
         //Assert
         Assert.Equal(ValidationResult.Success, result);
