@@ -14,15 +14,13 @@ namespace Frontend.Services
 
         public async Task<List<ReaderBookListDto>> GetAvailableBooksAsync()
         {
-            // A Backend: [HttpGet("GetAvailableBooks")]
+            // Kontroller: [HttpGet("GetAvailableBooks")]
             return await _httpClient.GetFromJsonAsync<List<ReaderBookListDto>>("api/Reader/GetAvailableBooks") ?? new();
         }
 
         public async Task<List<ReaderLoanListDto>> GetMyLoansAsync(int readerId)
         {
-            // A Backend útvonalad: [HttpGet("GetLoansBy{readerId}")]
-            // Ezért az URL: api/Reader/GetLoansBy5 (például)
-            return await _httpClient.GetFromJsonAsync<List<ReaderLoanListDto>>($"api/Reader/GetLoansBy{readerId}") ?? new();
+            return await _httpClient.GetFromJsonAsync<List<ReaderLoanListDto>>($"api/Reader/GetLoansBy/{readerId}") ?? new();
         }
     }
 }

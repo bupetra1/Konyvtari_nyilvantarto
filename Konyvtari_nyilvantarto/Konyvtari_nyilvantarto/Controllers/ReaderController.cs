@@ -32,7 +32,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <returns>A list of <see cref="ReaderLoanListDto"/> objects representing the reader's loan data.</returns>
         /// <response code="200">Returns the list of loans for the specified reader successfully.</response>
         /// <response code="404">If no reader is found with the specified ID.</response>
-        [HttpGet("loans/{readerId}")]
+        [HttpGet("GetLoansBy/{readerId}")]
         public async Task<ActionResult<List<ReaderLoanListDto>>> GetLoansByReaderIdAsync(int readerId)
         {
             var readerLoans = await _repository.GetLoansByReaderIdAsync(readerId);
@@ -50,7 +50,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// </summary>
         /// <returns>A list of <see cref="ReaderBookListDto"/> objects representing the available books.</returns>
         /// <response code="200">Returns the list of books available for borrowing.</response>
-        [HttpGet("books")]
+        [HttpGet("GetAvailableBooks")]
         public async Task<ActionResult<List<ReaderBookListDto>>> GetAvailableBooksAsync()
         {
             var availableBooks = await _repository.GetAvailableBooksAsync();

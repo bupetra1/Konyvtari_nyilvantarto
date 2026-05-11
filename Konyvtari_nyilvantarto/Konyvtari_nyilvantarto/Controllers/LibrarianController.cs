@@ -66,7 +66,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <returns>The newly created book object.</returns>
         /// <response code="200">The book was successfully registered.</response>
         /// <response code="400">If the provided book data is invalid.</response>
-        [HttpPost("books")]
+        [HttpPost("CreateBook")]
         public async Task<IActionResult> CreateBookAsync(CreateBookDto createBookDto)
         {
             await _repository.CreateBookAsync(createBookDto);
@@ -80,7 +80,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <returns>The newly created reader object.</returns>
         /// <response code="200">The reader was successfully registered.</response>
         /// <response code="400">If the provided reader data is invalid.</response>
-        [HttpPost("readers")]
+        [HttpPost("CreateReader")]
         public async Task<IActionResult> CreateReaderAsync(CreateReaderDto createReaderDto)
         {
             await _repository.CreateReaderAsync(createReaderDto);
@@ -94,7 +94,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <response code="200">The loan was successfully registered.</response>
         /// <response code="400">If the provided loan data is invalid.</response>
         /// <response code="409">If the specified book is currently unavailable.</response>
-        [HttpPost("loans")]
+        [HttpPost("CreateLoanAsync")]
         public async Task<IActionResult> CreateLoanAsync(CreateLoanDto createLoanDto)
         {
             if(!await _repository.IsBookAvailableAsync(createLoanDto.BookId))
@@ -110,7 +110,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// </summary>
         /// <param name="bookId">The unique identifier of the book to be deleted.</param>
         /// <response code="200">The book was successfully deleted.</response>  
-        [HttpDelete("books/{bookId}")]
+        [HttpDelete("DeleteBook")]
         public async Task<IActionResult> DeleteBookAsync(int bookId)
         {
             await _repository.DeleteBookAsync(bookId);
@@ -121,7 +121,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// </summary>
         /// <param name="readerId">The unique identifier of the reader to be deleted.</param>
         /// <response code="200">The reader was successfully deleted.</response> 
-        [HttpDelete("readers/{readerId}")]
+        [HttpDelete("DeleteReader")]
         public async Task<IActionResult> DeleteReaderAsync(int readerId)
         {
             await _repository.DeleteReaderAsync(readerId);
@@ -133,7 +133,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// </summary>
         /// <param name="loanId">The unique identifier of the loan to be deleted.</param>
         /// <response code="200">The loan was successfully deleted.</response>
-        [HttpDelete("loans/{loanId}")]
+        [HttpDelete("DeleteLoan")]
         public async Task<IActionResult> DeleteLoanAsync(int loanId)
         {
             await _repository.DeleteLoanAsync(loanId);
@@ -147,7 +147,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="bookDto">A <see cref="BookDto"/> object containing the updated details.</param>
         /// <response code="200">The book was successfully updated.</response>
         /// <response code="400">If the provided data is invalid.</response>
-        [HttpPut("books/{bookId}")]
+        [HttpPut("UpdateBook")]
         public async Task<IActionResult> UpdateBookAsync(int bookId, BookDto bookDto)
         {
             await _repository.UpdateBookAsync(bookId,bookDto);
@@ -161,7 +161,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="readerDto">A <see cref="ReaderDto"/> object containing the updated details.</param>
         /// <response code="200">The reader was successfully updated.</response>
         /// <response code="400">If the provided data is invalid.</response>
-        [HttpPut("readers/{readerId}")]
+        [HttpPut("UpdateReader")]
         public async Task<IActionResult> UpdateReaderAsync(int readerId, ReaderDto readerDto)
         {
             await _repository.UpdateReaderAsync(readerId,readerDto);
@@ -175,7 +175,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="loanDto">A <see cref="LoanDto"/> object containing the updated details.</param>
         /// <response code="200">The loan was successfully updated.</response>
         /// <response code="400">If the provided data is invalid.</response>
-        [HttpPut("loans/{loanId}")]
+        [HttpPut("UpdateLoan/{loanId}")]
         public async Task<IActionResult> UpdateLoanAsync(int loanId, LoanDto loanDto)
         {
             await _repository.UpdateLoanAsync(loanId,loanDto);
