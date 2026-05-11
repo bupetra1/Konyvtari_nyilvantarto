@@ -41,8 +41,8 @@ namespace Share.Dtos
         public DateOnly? ReturnDate {get; set;}
 
         /// <summary>
-        /// The dynamically calculated late fee for an overdue book. 
-        /// The fee increases progressively based on the number of days late.
+        /// The dynamically calculated late fee based on the due date and return date.
+        /// Calculation is performed by the <see cref="LateFeeCalculator"/>.
         /// </summary>
         public int LateFee => LateFeeCalculator.CalculateLateFee(DueDate, ReturnDate);
     }
