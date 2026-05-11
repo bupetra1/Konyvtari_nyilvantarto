@@ -100,7 +100,7 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <response code="200">The loan was successfully registered.</response>
         /// <response code="400">If the provided loan data is invalid.</response>
         /// <response code="409">If the specified book is currently unavailable.</response>
-        [HttpPost("CreateLoanAsync")]
+        [HttpPost("CreateLoan")]
         public async Task<IActionResult> CreateLoanAsync(CreateLoanDto createLoanDto)
         {
             if(!await _repository.IsBookAvailableAsync(createLoanDto.BookId))
