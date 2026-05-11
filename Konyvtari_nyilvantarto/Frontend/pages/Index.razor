@@ -6,13 +6,13 @@
 @inject ILoanRepository LoanService
 
 <div class="jumbotron bg-light py-4 shadow-sm rounded mb-4 text-center">
-    <h1 class="display-4">📚 Library Dashboard</h1>
-    <p class="lead">Üdvözöljük a könyvtár kezelő felületen!</p>
+    <h1 class="display-4">Könyvtári nyilvántartó</h1>
+    <p class="lead">Üdvözöljük!</p>
     <hr class="my-4">
     <div class="d-flex justify-content-center gap-3">
-        <a href="/books" class="btn btn-outline-primary btn-lg">📖 Könyvek</a>
-        <a href="/readers" class="btn btn-outline-success btn-lg">👥 Olvasók</a>
-        <a href="/loans" class="btn btn-outline-info btn-lg text-white">📋 Kölcsönzések</a>
+        <a href="/books" class="btn btn-outline-primary btn-lg">Könyvek hozzáadása, módosítása</a>
+        <a href="/readers" class="btn btn-outline-success btn-lg">Olvasók hozzáadása módosítása</a>
+        <a href="/loans" class="btn btn-outline-info btn-lg text-blue">Kölcsönzések bevitele</a>
     </div>
 </div>
 
@@ -20,7 +20,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-warning">
-                <div class="card-header bg-warning text-dark fw-bold">⚠️ Közelgő határidők (3 nap)</div>
+                <div class="card-header bg-warning text-dark fw-bold">Közelgő határidők (3 nap)</div>
                 <ul class="list-group list-group-flush">
                     @if (expiringLoans.Any())
                     {
@@ -42,7 +42,7 @@
 
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-primary">
-                <div class="card-header bg-primary text-white fw-bold">🆕 Legfrissebb könyvek</div>
+                <div class="card-header bg-primary text-white fw-bold">Legfrissebb könyvek</div>
                 <ul class="list-group list-group-flush">
                     @foreach (var book in latestBooks)
                     {
@@ -57,7 +57,7 @@
 
         <div class="col-md-4">
             <div class="card h-100 shadow-sm border-danger">
-                <div class="card-header bg-danger text-white fw-bold">💰 Legnagyobb tartozások</div>
+                <div class="card-header bg-danger text-white fw-bold">Legnagyobb tartozások</div>
                 <ul class="list-group list-group-flush">
                     @if (topDebtors.Any())
                     {

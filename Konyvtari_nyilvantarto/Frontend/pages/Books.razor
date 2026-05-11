@@ -7,11 +7,11 @@
 <div class="container mt-4">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h1><i class="oi oi-book"></i> Book Management</h1>
+            <h1><i class="oi oi-book"></i>Könyvek kezelése</h1>
         </div>
         <div class="col-md-4 text-end">
             <button class="btn btn-primary shadow-sm" @onclick="ShowCreateForm">
-                <span class="oi oi-plus"></span> Add New Book
+                <span class="oi oi-plus"></span> Új könyv hozzáadása
             </button>
         </div>
     </div>
@@ -28,7 +28,7 @@
     {
         <div class="card mb-4 shadow border-primary">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">@(isEditMode ? "Edit Existing Book" : "Register New Book")</h5>
+                <h5 class="mb-0">@(isEditMode ? "Könyv szerkesztése" : "Új könyv bevitele")</h5>
             </div>
             <div class="card-body">
                 <EditForm Model="newBook" OnValidSubmit="SaveBook">
@@ -36,24 +36,24 @@
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Title</label>
-                            <InputText class="form-control" @bind-Value="newBook.Title" placeholder="e.g. The Great Gatsby" />
+                            <label class="form-label fw-bold">Cím:</label>
+                            <InputText class="form-control" @bind-Value="newBook.Title" placeholder="pl. Csendes Halál" />
                             <ValidationMessage For="@(() => newBook.Title)" class="text-danger small" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Author</label>
-                            <InputText class="form-control" @bind-Value="newBook.Author" placeholder="e.g. F. Scott Fitzgerald" />
+                            <label class="form-label fw-bold">Szerző:</label>
+                            <InputText class="form-control" @bind-Value="newBook.Author" placeholder="pl. Peter May" />
                             <ValidationMessage For="@(() => newBook.Author)" class="text-danger small" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Publisher</label>
+                            <label class="form-label fw-bold">Kiadó:</label>
                             <InputText class="form-control" @bind-Value="newBook.Publisher" placeholder="Optional" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Publication Year</label>
+                            <label class="form-label fw-bold">Kiadás éve:</label>
                             <InputNumber class="form-control" @bind-Value="newBook.PublicationYear" />
                             <ValidationMessage For="@(() => newBook.PublicationYear)" class="text-danger small" />
                         </div>
@@ -61,7 +61,7 @@
 
                     <div class="d-flex gap-2 mt-2">
                         <button type="submit" class="btn btn-success px-4">
-                            <span class="oi oi-check"></span> @(isEditMode ? "Update Book" : "Save Book")
+                            <span class="oi oi-check"></span> @(isEditMode ? "Szerkesztés" : "Mentés")
                         </button>
                         <button type="button" class="btn btn-outline-secondary px-4" @onclick="CancelCreate">
                             Cancel
@@ -78,11 +78,11 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Publisher</th>
-                        <th>Year</th>
-                        <th class="text-center">Actions</th>
+                        <th>Cím</th>
+                        <th>Szerző</th>
+                        <th>Kiadó</th>
+                        <th>Kiadás éve</th>
+                        <th class="text-center">Műveletek</th>
                     </tr>
                 </thead>
                 <tbody>
