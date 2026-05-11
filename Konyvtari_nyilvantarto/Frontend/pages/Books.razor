@@ -1,8 +1,213 @@
 ﻿@page "/books"
+@using Share.Dtos
+@using Frontend.Services
+@inject IBookRepository BookService
+@inject NavigationManager Navigation
 
-<h1>Könyvek</h1>
-<p>Itt tekintheti meg a könyveket.</p>
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="oi oi-book"></i> Book Management</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary shadow-sm" @onclick="ShowCreateForm">
+                <span class="oi oi-plus"></span> Add New Book
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="btn-close" @onclick="() => message = null"></button>
+        </div>
+    }
+
+    @if (showCreateForm)
+    {
+        <div class="card mb-4 shadow border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(isEditMode ? "Edit Existing Book" : "Register New Book")</h5>
+            </div>
+            <div class="card-body">
+                <EditForm Model="newBook" OnValidSubmit="SaveBook">
+                    <DataAnnotationsValidator />
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Title</label>
+                            <InputText class="form-control" @bind-Value="newBook.Title" placeholder="e.g. The Great Gatsby" />
+                            <ValidationMessage For="@(() => newBook.Title)" class="text-danger small" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Author</label>
+                            <InputText class="form-control" @bind-Value="newBook.Author" placeholder="e.g. F. Scott Fitzgerald" />
+                            <ValidationMessage For="@(() => newBook.Author)" class="text-danger small" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Publisher</label>
+                            <InputText class="form-control" @bind-Value="newBook.Publisher" placeholder="Optional" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Publication Year</label>
+                            <InputNumber class="form-control" @bind-Value="newBook.PublicationYear" />
+                            <ValidationMessage For="@(() => newBook.PublicationYear)" class="text-danger small" />
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-success px-4">
+                            <span class="oi oi-check"></span> @(isEditMode ? "Update Book" : "Save Book")
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary px-4" @onclick="CancelCreate">
+                            Cancel
+                        </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Publisher</th>
+                        <th>Year</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (books == null || !books.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No books found in the registry.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var book in books)
+                        {
+                            <tr>
+                                <td class="fw-bold">#@book.BookId</td>
+                                <td>@book.Title</td>
+                                <td>@book.Author</td>
+                                <td>@(book.Publisher ?? "-")</td>
+                                <td>@book.PublicationYear</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" @onclick="() => EditBook(book)">
+                                            <span class="oi oi-pencil"></span> Szerkesztés
+                                        </button>
+                                        <button class="btn btn-outline-danger" @onclick="() => DeleteBook(book.BookId)">
+                                            <span class="oi oi-trash"></span> Törlés
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @code {
+    private List<BookDto> books = new();
+    private CreateBookDto newBook = new();
+    private BookDto? selectedBook;
+    private bool showCreateForm = false;
+    private bool isEditMode = false;
+    private string? message;
 
+    protected override async Task OnInitializedAsync() => await LoadBooks();
+
+    private async Task LoadBooks()
+    {
+        books = await BookService.GetBooksAsync();
+    }
+
+    private void ShowCreateForm()
+    {
+        isEditMode = false;
+        newBook = new CreateBookDto();
+        showCreateForm = true;
+        message = null;
+    }
+
+    private async Task SaveBook()
+    {
+        if (isEditMode && selectedBook != null)
+        {
+            var updateDto = new BookDto
+            {
+                BookId = selectedBook.BookId,
+                Title = newBook.Title,
+                Author = newBook.Author,
+                Publisher = newBook.Publisher,
+                PublicationYear = newBook.PublicationYear
+            };
+
+            if (await BookService.UpdateBookAsync(selectedBook.BookId, updateDto))
+            {
+                await HandleSuccess("Book details updated successfully!");
+            }
+        }
+        else
+        {
+            if (await BookService.CreateBookAsync(newBook))
+            {
+                await HandleSuccess("New book added to the library!");
+            }
+        }
+    }
+
+    private async Task HandleSuccess(string msg)
+    {
+        message = msg;
+        showCreateForm = false;
+        isEditMode = false;
+        await LoadBooks();
+    }
+
+    private void EditBook(BookDto book)
+    {
+        selectedBook = book;
+        isEditMode = true;
+        showCreateForm = true;
+        message = null;
+        
+        newBook = new CreateBookDto
+        {
+            Title = book.Title,
+            Author = book.Author,
+            Publisher = book.Publisher,
+            PublicationYear = book.PublicationYear
+        };
+    }
+
+    private void CancelCreate()
+    {
+        showCreateForm = false;
+        isEditMode = false;
+        newBook = new CreateBookDto();
+    }
+    
+    private async Task DeleteBook(int id)
+    {
+        if (await BookService.DeleteBookAsync(id))
+        {
+            message = "Book removed from the system.";
+            await LoadBooks();
+        }
+    }
 }
