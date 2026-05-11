@@ -3,7 +3,7 @@ using Share.Dtos; // Fontos!
 
 namespace Frontend.Services
 {
-    public class LoanService
+    public class LoanService:ILoanRepository
     {
         private readonly HttpClient _httpClient;
 
