@@ -1,0 +1,129 @@
+@page "/konyvtaros"
+@using Share.Dtos
+@using Frontend.Services
+@inject IBookRepository BookService
+@inject IReaderRepository ReaderService
+@inject ILoanRepository LoanService
+
+<div class="jumbotron bg-light py-4 shadow-sm rounded mb-4 text-center">
+    <h1 class="display-4">Könyvtári nyilvántartó</h1>
+    <p class="lead">Üdvözöljük!</p>
+    <hr class="my-4">
+    <div class="d-flex justify-content-center gap-3">
+        <a href="/books" class="btn btn-outline-primary btn-lg">Könyvek hozzáadása, módosítása</a>
+        <a href="/readers" class="btn btn-outline-success btn-lg">Olvasók hozzáadása módosítása</a>
+        <a href="/loans" class="btn btn-outline-info btn-lg text-blue">Kölcsönzések bevitele</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark fw-bold">Közelgő határidők (3 nap)</div>
+                <ul class="list-group list-group-flush">
+                    @if (expiringLoans.Any())
+                    {
+                        @foreach (var loan in expiringLoans)
+                        {
+                            <li class="list-group-item small">
+                                <strong>@loan.BookTitle</strong><br />
+                                <span class="text-muted">@loan.ReaderName - Határidő: @loan.DueDate.ToString("yyyy.MM.dd")</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-muted">Nincs sürgető határidő.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white fw-bold">Legfrissebb könyvek</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var book in latestBooks)
+                    {
+                        <li class="list-group-item small">
+                            <strong>@book.Title</strong> (@book.PublicationYear)<br />
+                            <span class="text-muted">@book.Author</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-danger">
+                <div class="card-header bg-danger text-white fw-bold">Legnagyobb tartozások</div>
+                <ul class="list-group list-group-flush">
+                    @if (topDebtors.Any())
+                    {
+                        @foreach (var debtor in topDebtors)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="fw-bold">@debtor.Name</span>
+                                </div>
+                                <span class="badge bg-danger rounded-pill">@debtor.TotalFee Ft</span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-muted">Nincs aktív tartozás.</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<LoanDto> expiringLoans = new();
+    private List<BookDto> latestBooks = new();
+    private List<DebtorInfo> topDebtors = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allLoans = await LoanService.GetLoansAsync();
+        var allBooks = await BookService.GetBooksAsync();
+        var allReaders = await ReaderService.GetReadersAsync();
+
+        // 1. 3 napon belül lejáró aktív kölcsönzések (ahol még nincs visszahozva)
+        var today = DateOnly.FromDateTime(DateTime.Now);
+        var inThreeDays = today.AddDays(3);
+        expiringLoans = allLoans
+            .Where(l => l.ReturnDate == null && l.DueDate >= today && l.DueDate <= inThreeDays)
+            .OrderBy(l => l.DueDate)
+            .Take(5)
+            .ToList();
+
+        // 2. Legújabb megjelenésű könyvek (Kiadási év szerint csökkenő)
+        latestBooks = allBooks
+            .Where(b => b.PublicationYear.HasValue)
+            .OrderByDescending(b => b.PublicationYear)
+            .Take(5)
+            .ToList();
+
+        // 3. Legnagyobb adósságú olvasók kiszámítása
+        topDebtors = allReaders
+            .Select(r => new DebtorInfo
+            {
+                Name = r.Name,
+                TotalFee = allLoans.Where(l => l.ReaderId == r.ReaderId).Sum(l => l.LateFee)
+            })
+            .Where(d => d.TotalFee > 0)
+            .OrderByDescending(d => d.TotalFee)
+            .Take(5)
+            .ToList();
+    }
+
+    private class DebtorInfo
+    {
+        public string Name { get; set; } = "";
+        public int TotalFee { get; set; }
+    }
+}
