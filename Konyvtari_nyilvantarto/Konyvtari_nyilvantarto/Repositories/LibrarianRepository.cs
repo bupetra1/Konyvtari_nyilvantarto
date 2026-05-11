@@ -1,16 +1,28 @@
 using Microsoft.EntityFrameworkCore;
-using Konyvtari_nyilvantarto.Dtos;
+using Share.Dtos;
 
 namespace Konyvtari_nyilvantarto.Repositories
 {
+    /// <summary>
+    /// Provides the implementation for managing reader data in the database.
+    /// </summary>
     public class LibrarianRepository : ILibrarianRepository
     {
+        /// <summary>
+        /// The database context used for data access operations.
+        /// </summary>
         private readonly AppDbContext _dbContext;
 
+        /// <summary>
+        /// Constructor for the <see cref="LibrarianRepository"/> class.
+        /// </summary>
+        /// <param name="appDbContext">The database context used to perform data operations.</param>
         public LibrarianRepository(AppDbContext appDbContext)
         {
             _dbContext = appDbContext;
         }
+
+        /// <inheritdoc/>
         public async Task CreateBookAsync(CreateBookDto createBookDto)
         {
             var book = new Book
@@ -24,6 +36,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task CreateLoanAsync(CreateLoanDto createLoanDto)
         {
             var readerTask = _dbContext.Readers.FindAsync(createLoanDto.ReaderId).AsTask();
@@ -51,6 +64,7 @@ namespace Konyvtari_nyilvantarto.Repositories
 
         }
 
+        /// <inheritdoc/>
         public async Task CreateReaderAsync(CreateReaderDto createReaderDto)
         {
             var reader = new Reader
@@ -63,6 +77,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task DeleteBookAsync(int bookId)
         {
             var book = await _dbContext.Books.FindAsync(bookId);
@@ -73,6 +88,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task DeleteLoanAsync(int loanId)
         {
             var loan = await _dbContext.Loans.FindAsync(loanId);
@@ -83,6 +99,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task DeleteReaderAsync(int readerId)
         {
             var reader = await _dbContext.Readers.FindAsync(readerId);
@@ -93,6 +110,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<BookDto>> GetBooksAsync()
         {
             return await _dbContext.Books
@@ -107,6 +125,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToListAsync();
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<LoanDto>> GetLoansAsync()
         {
             return await _dbContext.Loans
@@ -127,6 +146,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToListAsync();                        
         }
 
+        /// <inheritdoc/>
         public async Task<IEnumerable<ReaderDto>> GetReadersAsync()
         {
             return await _dbContext.Readers
@@ -140,7 +160,7 @@ namespace Konyvtari_nyilvantarto.Repositories
                         .ToListAsync();
         }
 
-
+        /// <inheritdoc/>
         public async Task UpdateBookAsync(int bookId, BookDto bookDto)
         {
             var book = await _dbContext.Books.FindAsync(bookId);
@@ -155,6 +175,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task UpdateLoanAsync(int loanId, LoanDto loanDto)
         {
             var loan = await _dbContext.Loans.FindAsync(loanId);
@@ -170,6 +191,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task UpdateReaderAsync(int readerId, ReaderDto readerDto)
         {
             var reader = await _dbContext.Readers.FindAsync(readerId);
@@ -183,6 +205,7 @@ namespace Konyvtari_nyilvantarto.Repositories
             }
         }
 
+        /// <inheritdoc/>
         public async Task<bool> IsBookAvailableAsync(int bookId)
         {
             var book = await _dbContext.Loans.Where(l => l.BookId == bookId && l.ReturnDate == null).FirstOrDefaultAsync();

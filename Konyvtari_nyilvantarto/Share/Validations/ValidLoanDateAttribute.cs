@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Share.Validations
 {
-    public class ValidLoanDateAttribute : ValidationAttribute
+    internal class ValidLoanDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
