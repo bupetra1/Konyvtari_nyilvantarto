@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using Konyvtari_nyilvantarto.Dtos;
+using Share.Dtos;
 namespace Konyvtari_nyilvantarto.Validations
 {
     public class ValidReturnDateAttribute : ValidationAttribute
