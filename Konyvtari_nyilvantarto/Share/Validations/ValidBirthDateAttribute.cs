@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Konyvtari_nyilvantarto.Validations
 {
-    public class ValidBirthDateAttribute : ValidationAttribute
+    internal class ValidBirthDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Konyvtari_nyilvantarto.Validations
 {
-    public class ValidLoanDateAttribute : ValidationAttribute
+    internal class ValidLoanDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
