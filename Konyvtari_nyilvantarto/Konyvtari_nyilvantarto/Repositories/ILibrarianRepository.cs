@@ -29,7 +29,7 @@ namespace Konyvtari_nyilvantarto.Repositories
         /// Creates a new book record in the database.
         /// </summary>
         /// <param name="createBookDto">A <see cref="CreateBookDto"/> object containing the details of the new book to be registered.</param>
-        Task CreateBookAsync(CreateBookDto createBookDto);
+        Task<Book?> CreateBookAsync(CreateBookDto createBookDto);
 
         /// <summary>
         /// Creates a new reader record in the database.

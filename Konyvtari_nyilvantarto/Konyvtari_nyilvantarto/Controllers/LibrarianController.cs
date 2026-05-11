@@ -1,4 +1,5 @@
 using Konyvtari_nyilvantarto.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Share.Dtos;
 
@@ -66,10 +67,15 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <returns>The newly created book object.</returns>
         /// <response code="200">The book was successfully registered.</response>
         /// <response code="400">If the provided book data is invalid.</response>
+        /// <response code="500">If the new book could not be created.</response>
         [HttpPost("CreateBook")]
         public async Task<IActionResult> CreateBookAsync(CreateBookDto createBookDto)
         {
-            await _repository.CreateBookAsync(createBookDto);
+            var book = await _repository.CreateBookAsync(createBookDto);
+            if(book == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Could not add the new record");
+            }
             return Ok(createBookDto);
         }
 
@@ -146,10 +152,14 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="bookId">The unique identifier of the book to update.</param>
         /// <param name="bookDto">A <see cref="BookDto"/> object containing the updated details.</param>
         /// <response code="200">The book was successfully updated.</response>
-        /// <response code="400">If the provided data is invalid.</response>
+        /// <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
         [HttpPut("UpdateBook")]
         public async Task<IActionResult> UpdateBookAsync(int bookId, BookDto bookDto)
         {
+            if (bookId != bookDto.BookId)
+            {
+                return BadRequest("Mismatched IDs");
+            }
             await _repository.UpdateBookAsync(bookId,bookDto);
             return Ok();
         }
@@ -160,10 +170,14 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="readerId">The unique identifier of the reader to update.</param>
         /// <param name="readerDto">A <see cref="ReaderDto"/> object containing the updated details.</param>
         /// <response code="200">The reader was successfully updated.</response>
-        /// <response code="400">If the provided data is invalid.</response>
+        /// <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
         [HttpPut("UpdateReader")]
         public async Task<IActionResult> UpdateReaderAsync(int readerId, ReaderDto readerDto)
         {
+            if (readerId != readerDto.ReaderId)
+            {
+                return BadRequest("Mismatched IDs");
+            }
             await _repository.UpdateReaderAsync(readerId,readerDto);
             return Ok();
         }
@@ -174,10 +188,14 @@ namespace Konyvtari_nyilvantarto.Controllers
         /// <param name="loanId">The unique identifier of the loan to update.</param>
         /// <param name="loanDto">A <see cref="LoanDto"/> object containing the updated details.</param>
         /// <response code="200">The loan was successfully updated.</response>
-        /// <response code="400">If the provided data is invalid.</response>
+        /// <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
         [HttpPut("UpdateLoan/{loanId}")]
         public async Task<IActionResult> UpdateLoanAsync(int loanId, LoanDto loanDto)
         {
+            if (loanId != loanDto.LoanId)
+            {
+                return BadRequest("Mismatched IDs");
+            }
             await _repository.UpdateLoanAsync(loanId,loanDto);
             return Ok();
         }
