@@ -1,0 +1,206 @@
+﻿@page "/loans"
+@using Share.Dtos
+@using Frontend.Services
+@inject LoanService LoanService
+@inject BookService BookService
+@inject ReaderService ReaderService
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="oi oi-list"></i> Loan Management</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-primary shadow-sm" @onclick="ShowCreateForm">
+                <span class="oi oi-plus"></span> Create New Loan
+            </button>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @message
+            <button type="button" class="btn-close" @onclick="() => message = null"></button>
+        </div>
+    }
+
+    @if (showCreateForm)
+    {
+        <div class="card mb-4 shadow border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(isEditMode ? "Edit Loan Details" : "New Loan Registration")</h5>
+            </div>
+            <div class="card-body">
+                <EditForm Model="formModel" OnValidSubmit="SaveLoan">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary class="text-danger small" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Reader</label>
+                            <InputSelect class="form-select" @bind-Value="formModel.ReaderId">
+                                <option value="0">-- Select Reader --</option>
+                                @foreach (var reader in readers)
+                                {
+                                    <option value="@reader.ReaderId">@reader.Name</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => formModel.ReaderId)" class="text-danger small" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Book</label>
+                            <InputSelect class="form-select" @bind-Value="formModel.BookId">
+                                <option value="0">-- Select Book --</option>
+                                @foreach (var book in books)
+                                {
+                                    <option value="@book.BookId">@book.Title (@book.Author)</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="@(() => formModel.BookId)" class="text-danger small" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Due Date</label>
+                            <input type="date" class="form-control" @bind="formModel.DueDate" />
+                            <ValidationMessage For="@(() => formModel.DueDate)" class="text-danger small" />
+                        </div>
+                        
+                        @if (isEditMode)
+                        {
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Return Date (Optional)</label>
+                                <input type="date" class="form-control" @bind="editDto.ReturnDate" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-success px-4">
+                            <span class="oi oi-check"></span> Save
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary px-4" @onclick="Cancel">
+                            Cancel
+                        </button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Reader</th>
+                        <th>Book</th>
+                        <th>Loan Date</th>
+                        <th>Due Date</th>
+                        <th>Return Date</th>
+                        <th>Late Fee</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var loan in loans)
+                    {
+                        <tr class="@(loan.ReturnDate == null && loan.DueDate < DateOnly.FromDateTime(DateTime.Now) ? "table-danger" : "")">
+                            <td>@loan.ReaderName</td>
+                            <td>@loan.BookTitle</td>
+                            <td>@loan.LoanDate</td>
+                            <td>@loan.DueDate</td>
+                            <td>@(loan.ReturnDate?.ToString() ?? "Not returned")</td>
+                            <td class="fw-bold text-danger">@loan.LateFee Ft</td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary" @onclick="() => EditLoan(loan)">
+                                    <span class="oi oi-pencil"></span>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick="() => DeleteLoan(loan.LoanId)">
+                                    <span class="oi oi-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<LoanDto> loans = new();
+    private List<BookDto> books = new();
+    private List<ReaderDto> readers = new();
+
+    private CreateLoanDto formModel = new();
+    private LoanDto editDto = new(); // Csak edit módban használjuk
+    
+    private bool showCreateForm = false;
+    private bool isEditMode = false;
+    private string? message;
+
+    protected override async Task OnInitializedAsync() => await LoadData();
+
+    private async Task LoadData()
+    {
+        loans = await LoanService.GetLoansAsync();
+        books = await BookService.GetBooksAsync();
+        readers = await ReaderService.GetReadersAsync();
+    }
+
+    private void ShowCreateForm()
+    {
+        isEditMode = false;
+        formModel = new CreateLoanDto { DueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(14)) };
+        showCreateForm = true;
+    }
+
+    private async Task SaveLoan()
+    {
+        if (isEditMode)
+        {
+            // Edit esetén a LoanDto-t küldjük
+            editDto.ReaderId = formModel.ReaderId;
+            editDto.BookId = formModel.BookId;
+            editDto.DueDate = formModel.DueDate;
+
+            if (await LoanService.UpdateLoanAsync(editDto.LoanId, editDto))
+                await HandleSuccess("Loan updated.");
+        }
+        else
+        {
+            if (await LoanService.CreateLoanAsync(formModel))
+                await HandleSuccess("Loan created.");
+        }
+    }
+
+    private void EditLoan(LoanDto loan)
+    {
+        isEditMode = true;
+        editDto = loan;
+        formModel = new CreateLoanDto
+        {
+            ReaderId = loan.ReaderId,
+            BookId = loan.BookId,
+            DueDate = loan.DueDate
+        };
+        showCreateForm = true;
+    }
+
+    private async Task HandleSuccess(string msg)
+    {
+        message = msg;
+        showCreateForm = false;
+        await LoadData();
+    }
+
+    private void Cancel() => showCreateForm = false;
+
+    private async Task DeleteLoan(int id)
+    {
+        if (await LoanService.DeleteLoanAsync(id)) await LoadData();
+    }
+}
