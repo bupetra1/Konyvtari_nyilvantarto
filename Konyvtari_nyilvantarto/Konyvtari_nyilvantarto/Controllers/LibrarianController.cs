@@ -1,6 +1,6 @@
 using Konyvtari_nyilvantarto.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Konyvtari_nyilvantarto.Dtos;
+using Share.Dtos;
 
 namespace Konyvtari_nyilvantarto.Controllers
 {

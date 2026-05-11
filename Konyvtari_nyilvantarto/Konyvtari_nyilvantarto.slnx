@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../Konyvtari_Nyilvantarto.Tests/Konyvtari_Nyilvantarto.Tests.csproj" />
   <Project Path="Frontend/Frontend.csproj" Id="536b0caa-c8a4-4a79-8db4-ee1b15c77e6a" />
   <Project Path="Konyvtari_nyilvantarto/Konyvtari_nyilvantarto.csproj" />
   <Project Path="Share/Share.csproj" Id="3b4913ff-2921-4650-9e79-94c88003ba1d" />

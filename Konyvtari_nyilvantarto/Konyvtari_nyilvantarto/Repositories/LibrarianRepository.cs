@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Konyvtari_nyilvantarto.Dtos;
+using Share.Dtos;
 
 namespace Konyvtari_nyilvantarto.Repositories
 {

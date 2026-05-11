@@ -1,4 +1,4 @@
-using Konyvtari_nyilvantarto.Dtos;
+using Share.Dtos;
 using Konyvtari_nyilvantarto.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
