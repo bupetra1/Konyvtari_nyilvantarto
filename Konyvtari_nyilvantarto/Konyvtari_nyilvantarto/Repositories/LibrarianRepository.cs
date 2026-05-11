@@ -23,7 +23,7 @@ namespace Konyvtari_nyilvantarto.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task CreateBookAsync(CreateBookDto createBookDto)
+        public async Task<Book?> CreateBookAsync(CreateBookDto createBookDto)
         {
             var book = new Book
             {
@@ -33,7 +33,14 @@ namespace Konyvtari_nyilvantarto.Repositories
                 PublicationYear = createBookDto.PublicationYear
             };
             await _dbContext.Books.AddAsync(book);
-            await _dbContext.SaveChangesAsync();
+            var numberOfChanges = await _dbContext.SaveChangesAsync();
+
+            if (numberOfChanges > 0)
+            {
+                return book;
+            }
+
+            return null;
         }
 
         /// <inheritdoc/>
