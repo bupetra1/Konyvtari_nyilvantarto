@@ -29,12 +29,6 @@ namespace Share.Dtos
         /// <summary>
         /// The date the loan is initiated. This is automatically set to the current local date.
         /// </summary>
-        public DateOnly LoanDate
-        {
-            get
-            {
-                return DateOnly.FromDateTime(DateTime.Now);
-            }
-        }
+        public DateOnly LoanDate => DateOnly.FromDateTime(DateTime.Now);
     }
 }
