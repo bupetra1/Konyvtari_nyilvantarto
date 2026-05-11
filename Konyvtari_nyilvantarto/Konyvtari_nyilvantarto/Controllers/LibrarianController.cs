@@ -93,8 +93,8 @@ namespace Konyvtari_nyilvantarto.Controllers
             await _repository.UpdateReaderAsync(readerId,readerDto);
             return Ok();
         }
-        [HttpPut("UpdateLoan")]
-        public async Task<IActionResult> UpdateLoanAsync(int loanId, LoanDto loanDto)
+        [HttpPut("UpdateLoan/{loanId}")]
+        public async Task<IActionResult> UpdateLoanAsync(int loanId,[FromBody]  LoanDto loanDto)
         {
             await _repository.UpdateLoanAsync(loanId,loanDto);
             return Ok();

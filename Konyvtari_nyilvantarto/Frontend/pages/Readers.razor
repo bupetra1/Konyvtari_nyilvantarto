@@ -1,8 +1,8 @@
 ﻿@page "/readers"
 @using Share.Dtos
 @using Frontend.Services
-@inject ReaderService ReaderService
-@inject LoanService LoanService
+@inject IReaderRepository ReaderService
+@inject ILoanRepository LoanService
 
 <div class="container mt-4">
     <div class="row mb-4">
@@ -98,8 +98,14 @@
 
     private async Task LoadData()
     {
-        readers = await ReaderService.GetReadersAsync();
-        allLoans = await LoanService.GetLoansAsync();
+        var readersTask = ReaderService.GetReadersAsync();
+        var allLoansTask = LoanService.GetLoansAsync();
+
+        await Task.WhenAll(readersTask, allLoansTask);
+        readers = readersTask.Result.ToList();
+        allLoans = allLoansTask.Result.ToList();
+
+        StateHasChanged();
     }
 
     private int GetTotalLateFee(int readerId) => allLoans.Where(l => l.ReaderId == readerId).Sum(l => l.LateFee);

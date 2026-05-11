@@ -1,9 +1,9 @@
 ﻿@page "/loans"
 @using Share.Dtos
 @using Frontend.Services
-@inject LoanService LoanService
-@inject BookService BookService
-@inject ReaderService ReaderService
+@inject ILoanRepository LoanService
+@inject IBookRepository BookService
+@inject IReaderRepository ReaderService
 
 <div class="container mt-4">
     <div class="row mb-4">
