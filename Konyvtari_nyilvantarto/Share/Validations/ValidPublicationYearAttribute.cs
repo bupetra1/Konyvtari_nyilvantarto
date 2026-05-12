@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Share.Validations
 {
-    internal class ValidPublicationYearAttribute : ValidationAttribute
+    public class ValidPublicationYearAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {

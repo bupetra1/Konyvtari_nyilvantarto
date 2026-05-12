@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Share.Validations
 {
-    internal class ValidReturnDateAttribute : ValidationAttribute
+    public class ValidReturnDateAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {

@@ -1,0 +1,535 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Konyvtari_nyilvantarto</name>
+    </assembly>
+    <members>
+        <member name="T:Konyvtari_nyilvantarto.AppDbContext">
+            <summary>
+            The primary database context for the Library Management system, 
+            managing connections and entity mappings for books, readers, and loans.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.AppDbContext.Books">
+            <summary>
+            Gets or sets the collection of books in the library.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.AppDbContext.Readers">
+            <summary>
+            Gets or sets the collection of registered library readers.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.AppDbContext.Loans">
+            <summary>
+            Gets or sets the collection of registered loans.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.AppDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Konyvtari_nyilvantarto.AppDbContext})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Konyvtari_nyilvantarto.AppDbContext"/> class with the specified options.
+            </summary>
+            <param name="options">The options to be used by the database context.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.AppDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Configures the database schema and entity relationships using the Fluent API.
+            </summary>
+            <param name="modelBuilder">The builder being used to construct the model for this context.</param>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Book">
+            <summary>
+            Represents a book entity in the library database.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.Id">
+            <summary>
+            The unique identifier for the book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.Title">
+            <summary>
+            The title of the book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.Author">
+            <summary>
+            The author of the book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.Publisher">
+            <summary>
+            The publisher of the book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.PublicationYear">
+            <summary>
+            The year the book was published.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Book.Loans">
+            <summary>
+            The collection of loans associated with this book.
+            </summary>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Reader">
+            <summary>
+            Represents a registered reader in the library database.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Reader.Id">
+            <summary>
+            The unique identifier for the reader.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Reader.Name">
+            <summary>
+            The full name of the reader.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Reader.Address">
+            <summary>
+            The address of the reader.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Reader.BirthDate">
+            <summary>
+            The date of birth of the reader.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Reader.Loans">
+            <summary>
+            The collection of loans associated with this reader.
+            </summary>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Loan">
+            <summary>
+            Represents a book loan transaction in the library database.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.Id">
+            <summary>
+            The unique identifier for the loan.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.ReaderId">
+            <summary>
+            The foreign key referencing the reader who borrowed the book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.BookId">
+            <summary>
+            The foreign key referencing the borrowed book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.LoanDate">
+            <summary>
+            The date when the book was borrowed.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.DueDate">
+            <summary>
+            The deadline date by which the book must be returned.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.LateFee">
+            <summary>
+            The dynamically calculated late fee for an overdue book.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.ReturnDate">
+            <summary>
+            The date the book was returned.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.Reader">
+            <summary>
+            The navigation property representing the reader associated with this loan.
+            </summary>
+        </member>
+        <member name="P:Konyvtari_nyilvantarto.Loan.Book">
+            <summary>
+            The navigation property representing the borrowed book.
+            </summary>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Controllers.LibrarianController">
+            <summary>
+            Provides endpoints for managing library resources.
+            Provides CRUD operations for the core library entities: books, readers, and loans.
+            </summary>
+        </member>
+        <member name="F:Konyvtari_nyilvantarto.Controllers.LibrarianController._repository">
+            <summary>
+            Repository that provides data access operations for librarian tasks.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.#ctor(Konyvtari_nyilvantarto.Repositories.ILibrarianRepository)">
+            <summary>
+            Constructor for the <see cref="T:Konyvtari_nyilvantarto.Controllers.LibrarianController"/> class.
+            </summary>
+            <param name="repository">The repository used for data access operations.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.GetBooksAsync">
+            <summary>
+            Retrieves a list of all books stored in the database.  
+            </summary>
+            <returns>A list of <see cref="T:Share.Dtos.BookDto"/> objects representing the stored books.</returns>
+            <response code="200">Returns the list of books successfully.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.GetReadersAsync">
+            <summary>
+            Retrieves a list of all readers stored in the database. 
+            </summary>
+            <returns>A list of <see cref="T:Share.Dtos.ReaderDto"/> objects representing the stored reader data.</returns>
+            <response code="200">Returns the list of readers successfully.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.GetLoansAsync">
+            <summary>
+            Retrieves a list of all loans stored in the database. 
+            </summary>
+            <returns>A list of <see cref="T:Share.Dtos.LoanDto"/> objects representing the stored loan data.</returns>
+            <response code="200">Returns the list of loans successfully.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.CreateBookAsync(Share.Dtos.CreateBookDto)">
+            <summary>
+            Creates a new book record in the database.
+            </summary>
+            <param name="createBookDto">A <see cref="T:Share.Dtos.CreateBookDto"/> object containing the details of the new book to be registered.</param>
+            <returns>The newly created book object.</returns>
+            <response code="200">The book was successfully registered.</response>
+            <response code="400">If the provided book data is invalid.</response>
+            <response code="500">If the new book could not be created.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.CreateReaderAsync(Share.Dtos.CreateReaderDto)">
+            <summary>
+            Creates a new reader record in the database.
+            </summary>
+            <param name="createReaderDto">A <see cref="T:Share.Dtos.CreateReaderDto"/> object containing the details of the new reader to be registered.</param>
+            <returns>The newly created reader object.</returns>
+            <response code="200">The reader was successfully registered.</response>
+            <response code="400">If the provided reader data is invalid.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.CreateLoanAsync(Share.Dtos.CreateLoanDto)">
+            <summary>
+            Creates a new loan record in the database.
+            </summary>
+            <param name="createLoanDto">A <see cref="T:Share.Dtos.CreateLoanDto"/> object containing the details of the new loan to be registered.</param>
+            <returns>The newly created loan object.</returns>   
+            <response code="200">The loan was successfully registered.</response>
+            <response code="400">If the provided loan data is invalid.</response>
+            <response code="409">If the specified book is currently unavailable.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.DeleteBookAsync(System.Int32)">
+            <summary>
+            Deletes a specific book from the library catalog.
+            </summary>
+            <param name="bookId">The unique identifier of the book to be deleted.</param>
+            <response code="200">The book was successfully deleted.</response>  
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.DeleteReaderAsync(System.Int32)">
+            <summary>
+            Deletes a specific reader from the library catalog.
+            </summary>
+            <param name="readerId">The unique identifier of the reader to be deleted.</param>
+            <response code="200">The reader was successfully deleted.</response> 
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.DeleteLoanAsync(System.Int32)">
+            <summary>
+            Deletes a specific loan from the library catalog.
+            </summary>
+            <param name="loanId">The unique identifier of the loan to be deleted.</param>
+            <response code="200">The loan was successfully deleted.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.UpdateBookAsync(System.Int32,Share.Dtos.BookDto)">
+            <summary>
+            Updates the details of an existing book in the database.
+            </summary>
+            <param name="bookId">The unique identifier of the book to update.</param>
+            <param name="bookDto">A <see cref="T:Share.Dtos.BookDto"/> object containing the updated details.</param>
+            <response code="200">The book was successfully updated.</response>
+            <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.UpdateReaderAsync(System.Int32,Share.Dtos.ReaderDto)">
+            <summary>
+            Updates the details of an existing reader in the database.
+            </summary>
+            <param name="readerId">The unique identifier of the reader to update.</param>
+            <param name="readerDto">A <see cref="T:Share.Dtos.ReaderDto"/> object containing the updated details.</param>
+            <response code="200">The reader was successfully updated.</response>
+            <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.LibrarianController.UpdateLoanAsync(System.Int32,Share.Dtos.LoanDto)">
+            <summary>
+            Updates the details of an existing loan in the database.
+            </summary>
+            <param name="loanId">The unique identifier of the loan to update.</param>
+            <param name="loanDto">A <see cref="T:Share.Dtos.LoanDto"/> object containing the updated details.</param>
+            <response code="200">The loan was successfully updated.</response>
+            <response code="400">If the IDs mismatch OR the provided data is invalid.</response>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Controllers.ReaderController">
+            <summary>
+            Provides endpoints for querying available books and user loans.
+            </summary>
+        </member>
+        <member name="F:Konyvtari_nyilvantarto.Controllers.ReaderController._repository">
+            <summary>
+            Repository that provides data access operations for readers.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.ReaderController.#ctor(Konyvtari_nyilvantarto.Repositories.IReaderRepository)">
+            <summary>
+            Constructor for the <see cref="T:Konyvtari_nyilvantarto.Controllers.ReaderController"/> class.
+            </summary>
+            <param name="repository">The repository used for data access operations.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.ReaderController.GetLoansByReaderIdAsync(System.Int32)">
+            <summary>
+            Lists loans for the specified reader.
+            </summary>
+            <param name="readerId">The unique identifier of the reader whose loans are to be queried.</param>
+            <returns>A list of <see cref="T:Share.Dtos.ReaderLoanListDto"/> objects representing the reader's loan data.</returns>
+            <response code="200">Returns the list of loans for the specified reader successfully.</response>
+            <response code="404">If no reader is found with the specified ID.</response>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Controllers.ReaderController.GetAvailableBooksAsync">
+            <summary>
+            Lists the available books that the reader can borrow.
+            </summary>
+            <returns>A list of <see cref="T:Share.Dtos.ReaderBookListDto"/> objects representing the available books.</returns>
+            <response code="200">Returns the list of books available for borrowing.</response>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository">
+            <summary>
+            Defines the contract for managing reader data in the underlying data store.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.GetBooksAsync">
+            <summary>
+            Lists all books stored in the database.
+            </summary>
+            <returns>A collection of <see cref="T:Share.Dtos.BookDto"/> objects representing all stored books.</returns>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.GetReadersAsync">
+            <summary>
+            Lists all reader data stored in the database.
+            </summary>
+            <returns>A collection of <see cref="T:Share.Dtos.ReaderDto"/> objects representing all stored reader data.</returns>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.GetLoansAsync">
+            <summary>
+            Lists all loans stored in the database.
+            </summary>
+            <returns>A collection of <see cref="T:Share.Dtos.LoanDto"/> objects representing all stored loans.</returns>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.CreateBookAsync(Share.Dtos.CreateBookDto)">
+            <summary>
+            Creates a new book record in the database.
+            </summary>
+            <param name="createBookDto">A <see cref="T:Share.Dtos.CreateBookDto"/> object containing the details of the new book to be registered.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.CreateReaderAsync(Share.Dtos.CreateReaderDto)">
+            <summary>
+            Creates a new reader record in the database.
+            </summary>
+            <param name="createReaderDto">A <see cref="T:Share.Dtos.CreateReaderDto"/> object containing the details of the new reader to be registered.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.CreateLoanAsync(Share.Dtos.CreateLoanDto)">
+            <summary>
+            Creates a new loan record in the database.
+            </summary>
+            <param name="createLoanDto">A <see cref="T:Share.Dtos.CreateLoanDto"/> object containing the details of the new loan to be registered.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.UpdateBookAsync(System.Int32,Share.Dtos.BookDto)">
+            <summary>
+            Updates the details of an existing book in the database.
+            </summary>
+            <param name="bookId">The unique identifier of the book to update.</param>
+            <param name="bookDto">A <see cref="T:Share.Dtos.BookDto"/> object containing the updated details.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.UpdateReaderAsync(System.Int32,Share.Dtos.ReaderDto)">
+            <summary>
+            Updates the details of an existing reader in the database.
+            </summary>
+            <param name="readerId">The unique identifier of the reader to update.</param>
+            <param name="readerDto">A <see cref="T:Share.Dtos.ReaderDto"/> object containing the updated details.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.UpdateLoanAsync(System.Int32,Share.Dtos.LoanDto)">
+            <summary>
+            Updates the details of an existing loan in the database.
+            </summary>
+            <param name="loanId">The unique identifier of the loan to update.</param>
+            <param name="loanDto">A <see cref="T:Share.Dtos.LoanDto"/> object containing the updated details.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.DeleteBookAsync(System.Int32)">
+            <summary>
+            Deletes a specific book from the library catalog.
+            </summary>
+            <param name="bookId">The unique identifier of the book to be deleted.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.DeleteReaderAsync(System.Int32)">
+            <summary>
+            Deletes a specific reader from the library catalog.
+            </summary>
+            <param name="readerId">The unique identifier of the reader to be deleted.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.DeleteLoanAsync(System.Int32)">
+            <summary>
+            Deletes a specific loan from the library catalog.
+            </summary>
+            <param name="loanId">The unique identifier of the loan to be deleted.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ILibrarianRepository.IsBookAvailableAsync(System.Int32)">
+            <summary>
+            Checks whether a book is available to borrow. 
+            </summary>
+            <param name="bookId">The unique identifier of a book.</param>
+            <returns><see langword="true"/> if the specified book is available, <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Repositories.IReaderRepository">
+            <summary>
+            Defines the contract for querying reader-specific library data.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.IReaderRepository.GetAvailableBooksAsync">
+            <summary>
+            Lists the available books that the reader can borrow.
+            </summary>
+            <returns>A collection of <see cref="T:Share.Dtos.ReaderBookListDto"/> objects representing books that are available for borrowing.</returns>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.IReaderRepository.GetLoansByReaderIdAsync(System.Int32)">
+            <summary>
+            Lists loans for the specified reader.
+            </summary>
+            <param name="readerId">The unique identifier of the reader whose loans are to be queried.</param>
+            <returns>If the specified reader exists, then a collection of <see cref="T:Share.Dtos.ReaderLoanListDto"/> objects representing
+             the reader's loan data, else <see langword="null"/>.</returns>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Repositories.LibrarianRepository">
+            <summary>
+            Provides the implementation for managing reader data in the database.
+            </summary>
+        </member>
+        <member name="F:Konyvtari_nyilvantarto.Repositories.LibrarianRepository._dbContext">
+            <summary>
+            The database context used for data access operations.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.#ctor(Konyvtari_nyilvantarto.AppDbContext)">
+            <summary>
+            Constructor for the <see cref="T:Konyvtari_nyilvantarto.Repositories.LibrarianRepository"/> class.
+            </summary>
+            <param name="appDbContext">The database context used to perform data operations.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.CreateBookAsync(Share.Dtos.CreateBookDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.CreateLoanAsync(Share.Dtos.CreateLoanDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.CreateReaderAsync(Share.Dtos.CreateReaderDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.DeleteBookAsync(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.DeleteLoanAsync(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.DeleteReaderAsync(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.GetBooksAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.GetLoansAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.GetReadersAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.UpdateBookAsync(System.Int32,Share.Dtos.BookDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.UpdateLoanAsync(System.Int32,Share.Dtos.LoanDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.UpdateReaderAsync(System.Int32,Share.Dtos.ReaderDto)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.LibrarianRepository.IsBookAvailableAsync(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Konyvtari_nyilvantarto.Repositories.ReaderRepository">
+            <summary>
+            Provides implementation for querying reader-specific library data.
+            </summary>
+        </member>
+        <member name="F:Konyvtari_nyilvantarto.Repositories.ReaderRepository._dbContext">
+            <summary>
+            The database context used for data access operations.
+            </summary>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ReaderRepository.#ctor(Konyvtari_nyilvantarto.AppDbContext)">
+            <summary>
+            Constructor for the <see cref="T:Konyvtari_nyilvantarto.Repositories.ReaderRepository"/> class.
+            </summary>
+            <param name="appDbContext">The database context used to perform data operations.</param>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ReaderRepository.GetAvailableBooksAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Konyvtari_nyilvantarto.Repositories.ReaderRepository.GetLoansByReaderIdAsync(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type)">
+            <summary>
+            Generates a documentation comment ID for a type.
+            Example: T:Namespace.Outer+Inner`1 becomes T:Namespace.Outer.Inner`1
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Reflection.PropertyInfo)">
+            <summary>
+            Generates a documentation comment ID for a property.
+            Example: P:Namespace.ContainingType.PropertyName or for an indexer P:Namespace.ContainingType.Item(System.Int32)
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Type,System.String)">
+            <summary>
+            Generates a documentation comment ID for a property given its container type and property name.
+            Example: P:Namespace.ContainingType.PropertyName
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.CreateDocumentationId(System.Reflection.MethodInfo)">
+            <summary>
+            Generates a documentation comment ID for a method (or constructor).
+            For example:
+              M:Namespace.ContainingType.MethodName(ParamType1,ParamType2)~ReturnType
+              M:Namespace.ContainingType.#ctor(ParamType)
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.GetTypeDocId(System.Type,System.Boolean,System.Boolean)">
+            <summary>
+            Generates a documentation ID string for a type.
+            This method handles nested types (replacing '+' with '.'),
+            generic types, arrays, pointers, by-ref types, and generic parameters.
+            The <paramref name="includeGenericArguments"/> flag controls whether
+            constructed generic type arguments are emitted, while <paramref name="omitGenericArity"/>
+            controls whether the generic arity marker (e.g. "`1") is appended.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.OpenApi.Generated.DocumentationCommentIdHelper.NormalizeDocId(System.String)">
+            <summary>
+            Normalizes a documentation comment ID to match the compiler-style format.
+            Strips the return type suffix for ordinary methods but retains it for conversion operators.
+            </summary>
+            <param name="docId">The documentation comment ID to normalize.</param>
+            <returns>The normalized documentation comment ID.</returns>
+        </member>
+    </members>
+</doc>
