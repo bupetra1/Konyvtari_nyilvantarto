@@ -1,11 +1,5 @@
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\.msCoverageSourceRootsMapping_Konyvtari_Nyilvantarto.Tests
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\CoverletSourceRootsMapping_Konyvtari_Nyilvantarto.Tests
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.csproj.AssemblyReference.cache
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.AssemblyInfoInputs.cache
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.AssemblyInfo.cs
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.csproj.CoreCompileInputs.cache
-C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.sourcelink.json
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\testhost.dll
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\xunit.abstractions.dll
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\Konyvtari_nyilvantarto.deps.json
@@ -141,6 +135,12 @@ C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\Konyvtari_nyilvantarto.pdb
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\Konyvtari_nyilvantarto.xml
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\bin\Debug\net10.0\Share.pdb
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.csproj.AssemblyReference.cache
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.AssemblyInfoInputs.cache
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.AssemblyInfo.cs
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.csproj.CoreCompileInputs.cache
+C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.sourcelink.json
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtar.0DAFEEBA.Up2Date
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\Konyvtari_Nyilvantarto.Tests.dll
 C:\Users\Sára\Documents\Konyvtari_nyilvantarto\Konyvtari_Nyilvantarto.Tests\obj\Debug\net10.0\refint\Konyvtari_Nyilvantarto.Tests.dll
